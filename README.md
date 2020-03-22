@@ -29,3 +29,4 @@ UFP 2020 Computação Jogos
 
 [] Pause e resume
 
+[] Criar o boss
