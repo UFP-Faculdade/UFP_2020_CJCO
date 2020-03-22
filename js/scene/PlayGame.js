@@ -103,10 +103,6 @@ export default class playGame extends Phaser.Scene{
         //this.enemies.setScale(1.5);
 
 
-
-
-
-        
         this.themeSound = this.sound.add("theme", { volume: 0.1 });
         //this.themeSound.play();
         
