@@ -1,4 +1,5 @@
 import Bullet from './Bullet.js';
+import Explosion from './Explosion.js';
 
 export default class bird extends Phaser.Physics.Arcade.Sprite{
     constructor(scene, x, y){
@@ -30,6 +31,9 @@ export default class bird extends Phaser.Physics.Arcade.Sprite{
                 
             }
             this.timeToShoot= time + this.fireRate;
+            if (this.fireSound) {
+                this.fireSound.play();
+            }
         }
 
         this.bulletss.children.iterate(function(bullet){
@@ -64,5 +68,66 @@ export default class bird extends Phaser.Physics.Arcade.Sprite{
 
         
     }
+
+    
+    /**
+     * create an explosion, decrease one life, prevent a new collision and put the bird off-screen
+     */
+    dead() {
+        let x = this.x;
+        let y = this.y;
+        new Explosion(this.scene, x, y);
+        this.lives -= 1;
+
+        //prevents new collision
+        this.canBeKilled = false;
+        this.x = -100;
+        this.y = -100;
+
+    }
+
+
+    
+    /**
+     * replace the bird on-screen, change the bird color (tint) and re-enable collisions
+     */
+    revive() {
+
+        this.x = 100;
+        this.y = 100;
+
+        let i = 0;
+        let repetition = 200
+        let changeTint = true;
+
+        /**
+         * timer to change the bird's color/tint 
+         */
+        this.scene.time.addEvent({
+            repeat: repetition,
+            loop: false,
+            callback: () => {
+
+                //in the last repetition replace the normal color (tint) and re-enables collision
+                if (i >= repetition) {
+                    this.tint = 0xFFFFFF
+                    this.canBeKilled = true;
+                } else {
+
+                    if (changeTint) {
+                        this.tint = 0xFF0000
+                    } else {
+                        this.tint = 0xFFFFFF
+                    }
+                    if (i % 20 == 0) {
+                        changeTint = !changeTint;
+                    }
+
+                }
+                i++
+            }
+        });
+    }
+
 
 }

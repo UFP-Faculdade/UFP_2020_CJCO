@@ -1,5 +1,5 @@
 import bird from "../models/Bird.js";
-import enemy from "../models/Enemy.js";
+//import enemy from "../models/Enemy.js";
 import EnemiesGroup from "../models/EnemiesGroup.js";
 
 export default class playGame extends Phaser.Scene{
@@ -59,10 +59,36 @@ export default class playGame extends Phaser.Scene{
             fill: "#ffffff"
         });
 
+        this.cursors=this.input.keyboard.createCursorKeys();
+
         //criar ENEMY
         //this.enemy = new enemy (this, 250, 100);//Posicao da img do Passaro no ecra
         this.enemies = new EnemiesGroup(this.physics.world, this, 10,8);
 
+
+        /**
+         * deal with overlap/collision of bird bullets and enemies
+         */
+        this.physics.add.overlap(this.bird.bulletss, this.enemies, (bullet, enemy) => {
+            //bullet.destroy(); //destroy method removes object from the memory
+            //enemy.destroy();
+
+            this.enemies.killAndHide(enemy);
+            this.bird.bulletss.killAndHide(bullet);
+
+            //prevent collision with multiple enemies by removing the bullet from screen and stoping it
+            bullet.removeFromScreen();
+
+            //remove enemy from screen and stop it
+            enemy.removeFromScreen();
+
+            this.score += 10;
+            //update the score text
+            this.labelScore.setText("Score: " + this.score);
+
+        });     
+
+ /*       
         this.anims.create({
             key:'bulletEE',
             repeat:-1,
@@ -71,30 +97,44 @@ export default class playGame extends Phaser.Scene{
                 start:0, end:3
             })
         });
-       
-        for (var i = 0; i < this.enemies.length; i++)
-        {
-            this.enemies[i].anims.play('bulletEE',0);
-            //this.enemies[i].anims.setScale(1.5);
-        }
+       */
 
         //this.enemies.play('bulletEE');
         //this.enemies.setScale(1.5);
 
 
 
-        this.cursors=this.input.keyboard.createCursorKeys();
+
 
         
         this.themeSound = this.sound.add("theme", { volume: 0.1 });
-        this.themeSound.play();
+        //this.themeSound.play();
+        
+        let fireSound = this.sound.add("fire", {
+            volume: 0.1
+        });
 
+        this.bird.fireSound = fireSound;
         
     }
     
     update(time, delta){
         //console.log(time  + " " + delta);
-        this.bird.update(this.cursors, time);
-        //this.enemy.update(this.cursors, time);
+
+        //if (this.bird.lives > 0) {
+            //deal with enemies spawn rate
+            //this.spawnNewEnemies();
+
+            this.bird.update(this.cursors, time);
+
+            this.enemies.children.iterate(function (enemy) {
+                if (enemy.isOutsideCanvas()) {
+                    //bullet.active = false;
+                    this.enemies.killAndHide(enemy);
+                }
+            }, this);
+
+            //this.enemySpawnCounter += delta;
+        //}
     }
 }

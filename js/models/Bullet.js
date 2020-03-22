@@ -16,8 +16,8 @@ export default class bulletE extends Phaser.Physics.Arcade.Sprite{
         this.visible = true;
 
         
-        this.setBounce(0.8);
-        this.setCollideWorldBounds(true);
+       // this.setBounce(0.8);
+        //this.setCollideWorldBounds(true);
         
         this.setScale(2);
     }
@@ -41,6 +41,11 @@ export default class bulletE extends Phaser.Physics.Arcade.Sprite{
 
         
 
+    }
+
+    removeFromScreen() {
+        this.x = -100;
+        this.setVelocity(0, 0);
     }
 
     isOutsideCanvas(){

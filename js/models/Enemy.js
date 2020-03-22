@@ -1,4 +1,5 @@
 import Bullet from './Bullet.js';
+import Explosion from './Explosion.js';
 
 export default class enemy extends Phaser.Physics.Arcade.Sprite{
     constructor(scene, x, y){
@@ -19,6 +20,19 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
 
     }
     
+    removeFromScreen() {
+        new Explosion(this.scene, this.x, this.y);
+        this.x = -200;
+        this.setVelocity(0, 0);
+    }
+
+    isOutsideCanvas() {
+        const width = this.scene.game.config.width;
+        const height = this.scene.game.config.height;
+
+        return this.x > width || this.y > height || this.x < 0 || this.y < 0;
+    }
+
     update(cursors, time){
         if(this.timeToShoot < time){
             let bullet=this.bulletss.getFirstDead(true, this.x, this.y, "bullet");
