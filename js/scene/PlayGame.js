@@ -1,6 +1,7 @@
 import bird from "../models/Bird.js";
 //import enemy from "../models/Enemy.js";
 import EnemiesGroup from "../models/EnemiesGroup.js";
+import level from "../models/Level.js";
 
 export default class playGame extends Phaser.Scene{
     //extends default class PlayGame
@@ -32,7 +33,7 @@ export default class playGame extends Phaser.Scene{
         this.bird.setScale(0.5);
 
         this.bird.lives = 3;
-        this.level = 1;
+        this.level = 3;
         this.score = 0;
 
         //Animacao Bala
@@ -58,7 +59,7 @@ export default class playGame extends Phaser.Scene{
          /**
          * create text for Levels
          */
-        this.labelLives = this.add.text(180, 20, "Level: " + this.level, {
+        this.labelLives = this.add.text(width/2-50, 20, "Level: " + this.level, {
             font: "25px Cambria",
             fill: "#ffffff"
         });
@@ -71,12 +72,20 @@ export default class playGame extends Phaser.Scene{
             fill: "#ffffff"
         });
 
+        /**
+         * create text for SILENC sound background
+         */
+        this.labelLives = this.add.text(20, height - 30, "Q (Silence) ", {
+            font: "15px Cambria",
+            fill: "#ffffff"
+        });
+
         this.cursors=this.input.keyboard.createCursorKeys();
         this.q = this.input.keyboard.addKey("q");
 
         //criar ENEMY
-        //this.enemy = new enemy (this, 250, 100);//Posicao da img do Passaro no ecra
-        this.enemies = new EnemiesGroup(this.physics.world, this, 10,8);
+        //this.enemies = new EnemiesGroup(this.physics.world, this, 10,8);
+        this.enemies = new EnemiesGroup(this.physics.world, this, this.level);//1 == nivel do jogo
         
         this.anims.create({
             key:'AnimEnemy',
@@ -121,7 +130,7 @@ export default class playGame extends Phaser.Scene{
 
 
         this.themeSound = this.sound.add("theme", { volume: 0.1 });
-        this.themeSound.play();
+        this.themeSound.stop();//STOPPPPPPPPPPP
         this.music = true;
         
         let fireSound = this.sound.add("fire", {
@@ -149,20 +158,18 @@ export default class playGame extends Phaser.Scene{
             }, this);
 
             
-            if(this.q.isDown==true)
+            if(this.q.on==true )
             { 
-                if (this.music)
-                { 
-                    this.themeSound.stop();
+                if (this.music) { 
+                    this.themeSound.play();
                 }
                 else
                 {
-                    this.themeSound.play();
+                    this.themeSound.pause();
                 }
                 this.music=!this.music;
+                console.log("MUSIC: "+this.music)
             }
-            
-            //this.enemySpawnCounter += delta;
         //}
     }
 }
