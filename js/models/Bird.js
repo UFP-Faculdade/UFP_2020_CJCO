@@ -26,6 +26,7 @@ export default class bird extends Phaser.Physics.Arcade.Sprite{
     }
 
     update(cursors, time){
+        //acrescentei esta linha teste github
         
         if(cursors.space.isDown && this.timeToShoot < time){ //Disparar a bala
 
