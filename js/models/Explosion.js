@@ -14,5 +14,6 @@ export default class Explosion extends Phaser.Physics.Arcade.Sprite {
         });
 
         this.play("explosion");
+        
     }
 }
