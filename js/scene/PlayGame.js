@@ -35,6 +35,18 @@ export default class playGame extends Phaser.Scene{
         this.level = 1;
         this.score = 0;
 
+        //Animacao Bala
+        this.anims.create({
+            key:'AnimBullet',
+            repeat:-1,
+            frameRate:20,
+            frames: this.anims.generateFrameNames('bulletE', {
+                start:0, end:4
+            })
+        });
+        
+       
+
         /**
          * creates text for score
          */
@@ -75,6 +87,8 @@ export default class playGame extends Phaser.Scene{
         });
        
         this.enemies.playAnimation('AnimEnemy');
+
+
 
         /**
          * deal with overlap/collision of bird bullets and enemies
