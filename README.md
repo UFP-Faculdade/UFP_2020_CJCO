@@ -11,7 +11,7 @@ UFP 2020 Computação Jogos
 
 [OK] Multiplicar as naves
 
-[OK] Naves animadas
+[] Naves animadas
 
 [] Perder vidas
 
