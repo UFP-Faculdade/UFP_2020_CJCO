@@ -2,6 +2,7 @@
 UFP 2020 Computação Jogos
 
 [OK] Som musica
+
 [OK] Som tiros da nave
 [OK] Acertar com explusao
 [OK] Ecrã Pontos, vidas e niveis
