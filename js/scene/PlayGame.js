@@ -21,19 +21,31 @@ export default class playGame extends Phaser.Scene{
         //criar PLAYER
         this.bird = new bird (this, 250, 550);//Posicao da img PLAYER
         this.anims.create({
-            key:'bulletP2',
+            key:'AnimShip',
             repeat:-1,
             frameRate:5,
             frames: this.anims.generateFrameNames('playerD', {
                 start:0, end:4
             })
         });
-        this.bird.play('bulletP2');
+        this.bird.play('AnimShip');
         this.bird.setScale(0.5);
 
         this.bird.lives = 3;
         this.level = 1;
         this.score = 0;
+
+        //Animacao Bala
+        this.anims.create({
+            key:'AnimBullet',
+            repeat:-1,
+            frameRate:20,
+            frames: this.anims.generateFrameNames('bulletE', {
+                start:0, end:4
+            })
+        });
+        
+       
 
         /**
          * creates text for score
@@ -64,6 +76,18 @@ export default class playGame extends Phaser.Scene{
         //criar ENEMY
         //this.enemy = new enemy (this, 250, 100);//Posicao da img do Passaro no ecra
         this.enemies = new EnemiesGroup(this.physics.world, this, 10,8);
+        
+        this.anims.create({
+            key:'AnimEnemy',
+            repeat:-1,
+            frameRate:3,
+            frames: this.anims.generateFrameNames('enemyD', {
+                start:0, end:3
+            })
+        });
+       
+        this.enemies.playAnimation('AnimEnemy');
+
 
 
         /**
@@ -88,16 +112,8 @@ export default class playGame extends Phaser.Scene{
 
         });     
 
- /*       
-        this.anims.create({
-            key:'bulletEE',
-            repeat:-1,
-            frameRate:3,
-            frames: this.anims.generateFrameNames('enemyD', {
-                start:0, end:3
-            })
-        });
-       */
+       
+
 
         //this.enemies.play('bulletEE');
         //this.enemies.setScale(1.5);

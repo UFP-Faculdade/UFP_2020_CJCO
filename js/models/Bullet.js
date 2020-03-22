@@ -5,6 +5,8 @@ export default class bulletE extends Phaser.Physics.Arcade.Sprite{
         this.scene.add.existing(this);
         this.scene.physics.world.enable(this);
         this.baseVelocity=350;
+
+
     }
 
     
@@ -12,14 +14,17 @@ export default class bulletE extends Phaser.Physics.Arcade.Sprite{
         this.setVelocityY(-200);
 
 
-        this.active = true;
+        this.active = true;  
         this.visible = true;
+        this.play('AnimBullet');
+
+
 
         
        // this.setBounce(0.8);
         //this.setCollideWorldBounds(true);
         
-        this.setScale(2);
+        this.setScale(0.5);
     }
 
     fire_to_player(bird){//Dispara em direção ao PLAYER
@@ -38,7 +43,6 @@ export default class bulletE extends Phaser.Physics.Arcade.Sprite{
         
         this.active = true;
         this.visible = true;
-
         
 
     }

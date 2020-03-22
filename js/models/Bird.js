@@ -18,6 +18,11 @@ export default class bird extends Phaser.Physics.Arcade.Sprite{
             classType:Bullet
         });
 
+
+
+        
+
+
     }
 
     update(cursors, time){
@@ -26,6 +31,9 @@ export default class bird extends Phaser.Physics.Arcade.Sprite{
         if(cursors.space.isDown && this.timeToShoot < time){ //Disparar a bala
 
             let bullet=this.bulletss.getFirstDead(true, this.x, this.y, "bulletE");
+
+
+
             if(bullet){//Apos disparar 5 vezes bloqueia
                 
                 bullet.fire_to_enemy();
