@@ -16,6 +16,8 @@ UFP 2020 Computação Jogos
 [] Perder vidas
 
 [] Aumentar nivel
+*** Aumentar disparo bala
+*** Aumentar nr naves
 
 [] Disparar random
 
