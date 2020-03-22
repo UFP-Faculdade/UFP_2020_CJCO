@@ -1,5 +1,6 @@
 import bird from "../models/Bird.js";
 import enemy from "../models/Enemy.js";
+import EnemiesGroup from "../models/EnemiesGroup.js";
 
 export default class playGame extends Phaser.Scene{
     //extends default class PlayGame
@@ -30,9 +31,38 @@ export default class playGame extends Phaser.Scene{
         this.bird.play('bulletP2');
         this.bird.setScale(0.5);
 
+        this.bird.lives = 3;
+        this.level = 1;
+        this.score = 0;
+
+        /**
+         * creates text for score
+         */
+        this.labelScore = this.add.text(20, 20, "Score: " + this.score, {
+            font: "25px Cambria",
+            fill: "#ffffff"
+        });
+
+         /**
+         * create text for Levels
+         */
+        this.labelLives = this.add.text(180, 20, "Level: " + this.level, {
+            font: "25px Cambria",
+            fill: "#ffffff"
+        });
+
+        /**
+         * create text for bird lives
+         */
+        this.labelLives = this.add.text(350, 20, "Lives: " + this.bird.lives, {
+            font: "25px Cambria",
+            fill: "#ffffff"
+        });
 
         //criar ENEMY
-        this.enemy = new enemy (this, 250, 100);//Posicao da img do Passaro no ecra
+        //this.enemy = new enemy (this, 250, 100);//Posicao da img do Passaro no ecra
+        this.enemies = new EnemiesGroup(this.physics.world, this, 10,8);
+
         this.anims.create({
             key:'bulletEE',
             repeat:-1,
@@ -41,17 +71,30 @@ export default class playGame extends Phaser.Scene{
                 start:0, end:3
             })
         });
-        this.enemy.play('bulletEE');
-        this.enemy.setScale(1.5);
+       
+        for (var i = 0; i < this.enemies.length; i++)
+        {
+            this.enemies[i].anims.play('bulletEE',0);
+            //this.enemies[i].anims.setScale(1.5);
+        }
+
+        //this.enemies.play('bulletEE');
+        //this.enemies.setScale(1.5);
+
 
 
         this.cursors=this.input.keyboard.createCursorKeys();
+
+        
+        this.themeSound = this.sound.add("theme", { volume: 0.1 });
+        this.themeSound.play();
+
         
     }
     
     update(time, delta){
         //console.log(time  + " " + delta);
         this.bird.update(this.cursors, time);
-        this.enemy.update(this.cursors, time);
+        //this.enemy.update(this.cursors, time);
     }
 }

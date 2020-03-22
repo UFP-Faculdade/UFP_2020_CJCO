@@ -16,6 +16,7 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
             maxSize: this.bulletsMaxSize,
             classType:Bullet
         });
+
     }
     
     update(cursors, time){

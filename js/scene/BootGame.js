@@ -22,6 +22,10 @@ export default class bootGame extends Phaser.Scene{
             frameHeight:25
         });
 
+        this.load.audio("fire", "assets/fire-sound.mp3");
+        this.load.audio("theme", "assets/overworld.mp3");
+        this.load.audio("gameover", "assets/gameover.mp3");
+
     }
     create(){
         this.scene.start("PlayGame");
