@@ -26,3 +26,4 @@ UFP 2020 Computação Jogos
 [] Criar um segundo Player
 
 [] Pause e resume
+
