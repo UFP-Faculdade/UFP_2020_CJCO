@@ -69,12 +69,12 @@ export default class bird extends Phaser.Physics.Arcade.Sprite{
             this.setVelocityY(-velocityy);
         }
 
-//        if(cursors.left.isDown && this.x>this.frame.halfWidth){
+        //if(cursors.left.isDown && this.x>this.frame.halfWidth){
         if(cursors.left.isDown && this.x>20){
 
             this.setVelocityX(-velocityy);
         }
- //       if(cursors.right.isDown && this.x<width-this.frame.halfWidth){
+        //if(cursors.right.isDown && this.x<width-this.frame.halfWidth){
         if(cursors.right.isDown && this.x<width-20){    
             this.setVelocityX(velocityy);
         }
