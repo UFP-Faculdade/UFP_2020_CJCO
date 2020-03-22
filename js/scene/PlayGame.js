@@ -72,6 +72,7 @@ export default class playGame extends Phaser.Scene{
         });
 
         this.cursors=this.input.keyboard.createCursorKeys();
+        this.q = this.input.keyboard.addKey("q");
 
         //criar ENEMY
         //this.enemy = new enemy (this, 250, 100);//Posicao da img do Passaro no ecra
@@ -120,7 +121,8 @@ export default class playGame extends Phaser.Scene{
 
 
         this.themeSound = this.sound.add("theme", { volume: 0.1 });
-        //this.themeSound.play();
+        this.themeSound.play();
+        this.music = true;
         
         let fireSound = this.sound.add("fire", {
             volume: 0.1
@@ -146,6 +148,20 @@ export default class playGame extends Phaser.Scene{
                 }
             }, this);
 
+            
+            if(this.q.isDown==true)
+            { 
+                if (this.music)
+                { 
+                    this.themeSound.stop();
+                }
+                else
+                {
+                    this.themeSound.play();
+                }
+                this.music=!this.music;
+            }
+            
             //this.enemySpawnCounter += delta;
         //}
     }
