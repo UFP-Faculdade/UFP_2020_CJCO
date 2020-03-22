@@ -14,6 +14,8 @@ UFP 2020 Computação Jogos
 [] Naves animadas
 
 [] Perder vidas
+***1* Perder escudo
+***2* Perder a vida (-1)
 
 [] Aumentar nivel
 *** Aumentar disparo bala
