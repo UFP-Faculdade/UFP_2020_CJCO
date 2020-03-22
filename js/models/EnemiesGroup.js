@@ -14,7 +14,9 @@ export default class EnemiesGroup extends Phaser.Physics.Arcade.Group {
         for (let i = 0; i < colunas; i++) {
             for (let j = 0; j < linhas; j++) {
                 let child = new enemy(scene, 30 + (i * width), 70 + (j * height));
+                //teste tiago
                 child.active = false;
+
                 this.add(child);
             }
         }
