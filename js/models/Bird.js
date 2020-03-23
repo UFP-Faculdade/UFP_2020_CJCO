@@ -62,20 +62,20 @@ export default class bird extends Phaser.Physics.Arcade.Sprite{
         const width=this.scene.game.config.width;//Diz local da imagem
         const height=this.scene.game.config.height;//Diz local da imagem
         const velocityy = 200;
-        if(cursors.down.isDown && this.y<height-this.frame.halfHeight){//Quando carrega em DOWN e não passar do ecra
+        if(cursors.down.isDown && this.y<height-this.frame.halfHeight-25){//Quando carrega em DOWN e não passar do ecra
             this.setVelocityY(velocityy);
         }
-        if(cursors.up.isDown && this.y>this.frame.halfHeight){
+        if(cursors.up.isDown && this.y>this.frame.halfHeight +50){
             this.setVelocityY(-velocityy);
         }
 
         //if(cursors.left.isDown && this.x>this.frame.halfWidth){
-        if(cursors.left.isDown && this.x>20){
+        if(cursors.left.isDown && this.x>10){
 
             this.setVelocityX(-velocityy);
         }
         //if(cursors.right.isDown && this.x<width-this.frame.halfWidth){
-        if(cursors.right.isDown && this.x<width-20){    
+        if(cursors.right.isDown && this.x<width-10){    
             this.setVelocityX(velocityy);
         }
 
