@@ -11,6 +11,7 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
         this.timeToShoot=0;//devido à bala do passaro
         this.fireRate = 100;
         this.bulletsMaxSize=1;
+        this.setScale(0.4);
 
         //this.bullet=[]; //criar um array
         this.bulletss = this.scene.physics.add.group({

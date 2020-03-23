@@ -36,7 +36,7 @@ export default class playGame extends Phaser.Scene{
             })
         });
         this.bird.play('AnimShip');
-        this.bird.setScale(0.5);
+        this.bird.setScale(0.6);
 
         this.bird.lives = 3;
         this.level = 3;
@@ -48,7 +48,7 @@ export default class playGame extends Phaser.Scene{
             repeat:-1,
             frameRate:20,
             frames: this.anims.generateFrameNames('bulletE', {
-                start:0, end:4
+                start:0, end:3
             })
         });
         
@@ -93,17 +93,18 @@ export default class playGame extends Phaser.Scene{
         //this.enemies = new EnemiesGroup(this.physics.world, this, 10,8);
         this.enemies = new EnemiesGroup(this.physics.world, this, this.level);//1 == nivel do jogo
         
+        
         this.anims.create({
             key:'AnimEnemy',
             repeat:-1,
-            frameRate:3,
+            frameRate:6,
             frames: this.anims.generateFrameNames('enemyD', {
                 start:0, end:3
             })
         });
-       
         this.enemies.playAnimation('AnimEnemy');
-
+        //this.enemies.play('bulletEE');
+        
 
 
         /**
@@ -130,9 +131,6 @@ export default class playGame extends Phaser.Scene{
 
        
 
-
-        //this.enemies.play('bulletEE');
-        //this.enemies.setScale(1.5);
 
 
         this.themeSound = this.sound.add("theme", { volume: 0.1 });
