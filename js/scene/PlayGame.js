@@ -3,6 +3,10 @@ import bird from "../models/Bird.js";
 import EnemiesGroup from "../models/EnemiesGroup.js";
 import level from "../models/Level.js";
 
+var bg;
+var iter = 0
+var bgSpeed = 0.01
+
 export default class playGame extends Phaser.Scene{
     //extends default class PlayGame
     constructor(){
@@ -14,10 +18,12 @@ export default class playGame extends Phaser.Scene{
         //Fazer o background sempre em primeiro (Imagens são ordenadas umas frentes a outras)
         const width=this.game.config.width;//Diz local da imagem
         const height=this.game.config.height;//Diz local da imagem
-        //this.add.image(width/2, height/2, "bg");//Criei load no BootGame da imagem
         
-        //Outro metodo
-        this.add.image(0, 0, "bg").setDisplayOrigin(0,0).setDisplaySize(width, height);//Criei load no BootGame da imagem
+        //Background
+        //this.add.image(0, 0, "bg").setDisplayOrigin(0,0).setDisplaySize(width, height);//Criei load no BootGame da imagem
+        bg = this.add.tileSprite(0, 0, width*4, height*4, 'bg');
+
+
 
         //criar PLAYER
         this.bird = new bird (this, 250, 550);//Posicao da img PLAYER
@@ -142,6 +148,11 @@ export default class playGame extends Phaser.Scene{
     }
     
     update(time, delta){
+        //Mover o background
+        bg.tilePositionY = -Math.fround(iter) * 150;
+        bg.tilePositionX = Math.fround(iter) * 40;
+        iter += bgSpeed;
+
         //console.log(time  + " " + delta);
 
         //if (this.bird.lives > 0) {
