@@ -11,15 +11,16 @@ UFP 2020 Computação Jogos
 
 [OK] Multiplicar as naves
 
-[] Naves animadas
+[OK] Naves animadas
 
 [] Perder vidas
 ***1* Perder escudo
 ***2* Perder a vida (-1)
 
 [] Aumentar nivel
-*** Aumentar disparo bala
 *** Aumentar nr naves
+*** Aumentar velocidade disparo bala || Enimigo > Nave []
+*** Aumentar nr balas || Enimigo > Nave []
 
 [] Disparar random
 
