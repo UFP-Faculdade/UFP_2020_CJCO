@@ -17,7 +17,7 @@ export default class bulletE extends Phaser.Physics.Arcade.Sprite{
         this.active = true;  
         this.visible = true;
         this.play('AnimBullet');
-
+        
 
 
         

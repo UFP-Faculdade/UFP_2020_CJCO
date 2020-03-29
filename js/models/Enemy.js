@@ -4,7 +4,7 @@ import Explosion from './Explosion.js';
 export default class enemy extends Phaser.Physics.Arcade.Sprite{
     constructor(scene, x, y, level){
         
-        console.log("enemy"+level);
+        //console.log("enemy"+level);
         super(scene, x, y, "enemy"+level);
      
         this.scene.add.existing(this);
@@ -63,7 +63,7 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
             const height=this.scene.game.config.height;//Diz local da imagem
         
             if(bullet.isOutsideCanvas()){ //se bala for maior que tamanho do ecra
-                //bullet.active = false;//coloca a 0 nr balas
+                //bullet.active = false;
                 this.bulletss.killAndHide(bullet);
             }
         }, this)//devido ao objeto

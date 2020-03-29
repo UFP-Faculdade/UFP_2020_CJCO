@@ -1,5 +1,6 @@
 import bird from "../models/Bird.js";
 import EnemiesGroup from "../models/EnemiesGroup.js";
+//import enemy from "../models/Enemy.js";
 
 var bg;
 var iter = 0
@@ -134,7 +135,7 @@ export default class playGame extends Phaser.Scene{
         /**
          * create text for ENEMIES sound background
          */
-        this.labelNrTotalEnemys = this.add.text(250, height - 30, nrTotalEnemys + " Enemies", {
+        this.labelNrTotalEnemys = this.add.text(width/2-20, height - 30, nrTotalEnemys + " Enemies", {
             font: "15px Cambria",
             fill: "#ffffff"
         });
@@ -145,7 +146,7 @@ export default class playGame extends Phaser.Scene{
         this.physics.add.overlap(this.bird.bulletss, this.enemies, (bullet, enemy) => {
             //bullet.destroy(); //destroy method removes object from the memory
             //enemy.destroy();
-
+            
             this.enemies.killAndHide(enemy);
             this.bird.bulletss.killAndHide(bullet);
 
@@ -155,8 +156,10 @@ export default class playGame extends Phaser.Scene{
             //remove enemy from screen and stop it
             enemy.removeFromScreen();
 
-            this.score += 10;
-            nrTotalEnemys -=1;
+            this.score += this.currentLevel * this.lives * 2;//Nivel atual * Vidas atual * 2
+            nrTotalEnemys -= 1;//desconta 1 enimigo
+            
+
             //update the score text
             this.labelScore.setText("Score: " + this.score);
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
@@ -164,6 +167,8 @@ export default class playGame extends Phaser.Scene{
             //Reset quando é outro nivel
             if(nrTotalEnemys==0){
                 this.currentLevel+=1;
+                this.score+=50;
+
                 //this.enemies = new EnemiesGroup(this.physics.world, this, this.level);//1 == nivel do jogo
                 nrTotalEnemys = this.currentLevel * this.currentLevel;
                 this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
@@ -178,10 +183,22 @@ export default class playGame extends Phaser.Scene{
                     level: this.currentLevel, 
                     lives: this.bird.lives,
                     score: this.score
-                    });
+                });
 
                
             }
+
+            /*
+            //Se falhar a bala (Se sair do ecrã)
+            this.bird.bulletss.children.iterate(function(bullet){
+                
+                if(bullet.isOutsideCanvas()){
+                    console.log("FORAAAA");
+                    this.score -= 2 ;
+                }
+            }, this)//devido ao objeto
+            */
+        
         });     
 
        
@@ -208,8 +225,6 @@ export default class playGame extends Phaser.Scene{
         bg.tilePositionX = Math.fround(iter) * 40;
         iter += bgSpeed;
 
-        //console.log(time  + " " + delta);
-
         //if (this.bird.lives > 0) {
             //deal with enemies spawn rate
             //this.spawnNewEnemies();
@@ -223,7 +238,9 @@ export default class playGame extends Phaser.Scene{
                 }
             }, this);
 
-            
+
+        
+
             if(this.q.on==true )
             { 
                 if (this.music) { 
@@ -234,7 +251,7 @@ export default class playGame extends Phaser.Scene{
                     this.themeSound.pause();
                 }
                 this.music=!this.music;
-                console.log("MUSIC: "+this.music)
+                console.log("MUSIC: "+this.music);
             }
 /*
             if(this.p.isDown==true )
