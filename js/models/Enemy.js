@@ -2,8 +2,11 @@ import Bullet from './Bullet.js';
 import Explosion from './Explosion.js';
 
 export default class enemy extends Phaser.Physics.Arcade.Sprite{
-    constructor(scene, x, y){
-        super(scene, x, y, "enemyD");
+    constructor(scene, x, y, level){
+        
+        console.log("enemy"+level);
+        super(scene, x, y, "enemy"+level);
+     
         this.scene.add.existing(this);
         //enable physics wo sprite
         this.scene.physics.world.enable(this);

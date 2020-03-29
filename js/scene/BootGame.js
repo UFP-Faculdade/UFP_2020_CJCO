@@ -17,11 +17,30 @@ export default class bootGame extends Phaser.Scene{
             frameHeight:75
         });
         
-        this.load.spritesheet("enemyD","assets/ships/PNG/Enemies/enemySprite1.png",{
+        this.load.spritesheet("enemy1","assets/ships/PNG/Enemies/enemySprite1.png",{
             frameWidth:93,
             frameHeight:84
         });
+
+        this.load.spritesheet("enemy2","assets/ships/PNG/Enemies/enemySprite2.png",{
+            frameWidth:104,
+            frameHeight:84
+        });
+
+        this.load.spritesheet("enemy3","assets/ships/PNG/Enemies/enemySprite3.png",{
+            frameWidth:104,
+            frameHeight:84
+        });
         
+        this.load.spritesheet("enemy4","assets/ships/PNG/Enemies/enemySprite4.png",{
+            frameWidth:104,
+            frameHeight:84
+        });      
+        
+        this.load.spritesheet("enemy5","assets/ships/PNG/Enemies/enemySprite5.png",{
+            frameWidth:104,
+            frameHeight:84
+        });
 
         this.load.image("bulletP", "assets/images/bullet_to_player.png");//Imagem da bala amarela
         

@@ -6,6 +6,7 @@ var iter = 0
 var bgSpeed = 0.01
 var nrTotalEnemys=1;//Calcular numero de enimigos para depois avançar de nivel
 
+
 export default class playGame extends Phaser.Scene{
     //extends default class PlayGame
     constructor(){
@@ -13,9 +14,15 @@ export default class playGame extends Phaser.Scene{
     }
 
     currentLevel;
+    lives;
+    score;
     init(props) {
         const { level = 1 } = props
         this.currentLevel = level
+        const { lives = 3 } = props
+        this.lives = lives
+        const { score = 0 } = props
+        this.score = score
     }
 
     create(){
@@ -44,9 +51,7 @@ export default class playGame extends Phaser.Scene{
         this.bird.play('AnimShip');
         this.bird.setScale(0.6);
 
-        this.bird.lives = 3;
-        this.score = 0;
-        
+        this.bird.lives = this.vidas;
 
         //Animacao Bala
         this.anims.create({
@@ -58,7 +63,6 @@ export default class playGame extends Phaser.Scene{
             })
         });
         
-       
 
         /**
          * creates text for score
@@ -79,7 +83,7 @@ export default class playGame extends Phaser.Scene{
         /**
          * create text for bird lives
          */
-        this.labelLives = this.add.text(350, 20, "Lives: " + this.bird.lives, {
+        this.labelLives = this.add.text(350, 20, "Lives: " + this.lives, {
             font: "25px Cambria",
             fill: "#ffffff"
         });
@@ -95,31 +99,45 @@ export default class playGame extends Phaser.Scene{
         /**
          * create text for ENEMIES sound background
          */
+        /*
         this.labelNrTotalEnemys = this.add.text(250, height - 30, nrTotalEnemys + " Enemies", {
             font: "15px Cambria",
             fill: "#ffffff"
         });
-
+        */
         this.cursors=this.input.keyboard.createCursorKeys();
         this.q = this.input.keyboard.addKey("q");
+        this.p = this.input.keyboard.addKey("p");
 
+        
         //criar ENEMY
         //this.enemies = new EnemiesGroup(this.physics.world, this, 10,8);
         this.enemies = new EnemiesGroup(this.physics.world, this, this.currentLevel);//1 == nivel do jogo
-        
+ 
+        nrTotalEnemys = this.enemies.getNrNaves();
+
         
         this.anims.create({
-            key:'AnimEnemy',
+            key:"AnimEnemy"+this.currentLevel,
             repeat:-1,
             frameRate:6,
-            frames: this.anims.generateFrameNames('enemyD', {
+            frames: this.anims.generateFrameNames("enemy"+this.currentLevel, {
                 start:0, end:3
             })
         });
-        this.enemies.playAnimation('AnimEnemy');
-        //this.enemies.play('bulletEE');
         
 
+        this.enemies.playAnimation('AnimEnemy'+this.currentLevel);
+
+        //this.enemies.play('bulletEE');
+        
+        /**
+         * create text for ENEMIES sound background
+         */
+        this.labelNrTotalEnemys = this.add.text(250, height - 30, nrTotalEnemys + " Enemies", {
+            font: "15px Cambria",
+            fill: "#ffffff"
+        });
 
         /**
          * deal with overlap/collision of bird bullets and enemies
@@ -157,7 +175,10 @@ export default class playGame extends Phaser.Scene{
                 //this.scene.start('Level', { nivel: this.level});
 
                 this.scene.restart({
-                    level: this.currentLevel });
+                    level: this.currentLevel, 
+                    lives: this.bird.lives,
+                    score: this.score
+                    });
 
                
             }
@@ -176,7 +197,9 @@ export default class playGame extends Phaser.Scene{
         });
 
         this.bird.fireSound = fireSound;
-        
+
+        this.game.paused = false;
+
     }
     
     update(time, delta){
@@ -213,6 +236,20 @@ export default class playGame extends Phaser.Scene{
                 this.music=!this.music;
                 console.log("MUSIC: "+this.music)
             }
+/*
+            if(this.p.isDown==true )
+            { 
+                if (this.game.paused) { 
+                    this.game.resume(); 
+                }
+                else
+                {
+                    this.game.pause();
+                }
+                this.game.paused=!this.game.paused;
+                console.log("Pausa")
+            } 
+*/
         //}
     }
 }

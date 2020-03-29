@@ -9,7 +9,7 @@ export default class bird extends Phaser.Physics.Arcade.Sprite{
         this.scene.physics.world.enable(this);
         
         this.timeToShoot=0;//devido à bala do passaro
-        this.fireRate = 250;
+        this.fireRate = 500;
         this.bulletsMaxSize=5;
 
         //this.bullet=[]; //criar um array
