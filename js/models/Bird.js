@@ -52,6 +52,7 @@ export default class bird extends Phaser.Physics.Arcade.Sprite{
         
             if(bullet.isOutsideCanvas()){ //se bala for maior que tamanho do ecra
                 //bullet.active = false;//coloca a 0 nr balas
+                //this. -=2; //Retirar pontos por cada bala falhada
                 this.bulletss.killAndHide(bullet);
             }
         }, this)//devido ao objeto
