@@ -11,8 +11,8 @@ export default class EnemiesGroup extends Phaser.Physics.Arcade.Group {
 
         switch(level) {
             case 1:
-              var nrEnemysColunas=1;
-              var nrEnemysLinhas=1;
+              var nrEnemysColunas=8;
+              var nrEnemysLinhas=8;
               break;
             case 2:
                 var nrEnemysColunas=2;
@@ -30,8 +30,6 @@ export default class EnemiesGroup extends Phaser.Physics.Arcade.Group {
                 var nrEnemysColunas=2;
                 var nrEnemysLinhas=7;
           }
-          var nrTotalEnemys=nrEnemysColunas*nrEnemysLinhas;//Calcular numero de enimigos para depois avançar de nivel
-
         super(world, scene);
         const width = this.scene.game.config.width;
         const height = this.scene.game.config.height;
@@ -39,7 +37,7 @@ export default class EnemiesGroup extends Phaser.Physics.Arcade.Group {
         const height_enemy = (height / 2 / nrEnemysLinhas);
        
         //enemies.playAnimation('AnimEnemy');
-
+        //Local das naves
         for (let i = 0; i < nrEnemysColunas; i++) {
             for (let j = 0; j < nrEnemysLinhas; j++) {
                 let child = new enemy(scene, 30 + (i * width_enemy), 70 + (j * height_enemy));

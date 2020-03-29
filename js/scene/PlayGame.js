@@ -1,17 +1,23 @@
 import bird from "../models/Bird.js";
-//import enemy from "../models/Enemy.js";
 import EnemiesGroup from "../models/EnemiesGroup.js";
-import level from "../models/Level.js";
 
 var bg;
 var iter = 0
 var bgSpeed = 0.01
+var nrTotalEnemys=1;//Calcular numero de enimigos para depois avançar de nivel
 
 export default class playGame extends Phaser.Scene{
     //extends default class PlayGame
     constructor(){
         super("PlayGame");
     }
+
+    currentLevel;
+    init(props) {
+        const { level = 1 } = props
+        this.currentLevel = level
+    }
+
     create(){
         console.log("Starting game");
         
@@ -39,8 +45,8 @@ export default class playGame extends Phaser.Scene{
         this.bird.setScale(0.6);
 
         this.bird.lives = 3;
-        this.level = 3;
         this.score = 0;
+        
 
         //Animacao Bala
         this.anims.create({
@@ -65,7 +71,7 @@ export default class playGame extends Phaser.Scene{
          /**
          * create text for Levels
          */
-        this.labelLives = this.add.text(width/2-50, 20, "Level: " + this.level, {
+        this.labelLives = this.add.text(width/2-50, 20, "Level: " + this.currentLevel, {
             font: "25px Cambria",
             fill: "#ffffff"
         });
@@ -86,12 +92,20 @@ export default class playGame extends Phaser.Scene{
             fill: "#ffffff"
         });
 
+        /**
+         * create text for ENEMIES sound background
+         */
+        this.labelNrTotalEnemys = this.add.text(250, height - 30, nrTotalEnemys + " Enemies", {
+            font: "15px Cambria",
+            fill: "#ffffff"
+        });
+
         this.cursors=this.input.keyboard.createCursorKeys();
         this.q = this.input.keyboard.addKey("q");
 
         //criar ENEMY
         //this.enemies = new EnemiesGroup(this.physics.world, this, 10,8);
-        this.enemies = new EnemiesGroup(this.physics.world, this, this.level);//1 == nivel do jogo
+        this.enemies = new EnemiesGroup(this.physics.world, this, this.currentLevel);//1 == nivel do jogo
         
         
         this.anims.create({
@@ -124,9 +138,29 @@ export default class playGame extends Phaser.Scene{
             enemy.removeFromScreen();
 
             this.score += 10;
+            nrTotalEnemys -=1;
             //update the score text
             this.labelScore.setText("Score: " + this.score);
+            this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
 
+            //Reset quando é outro nivel
+            if(nrTotalEnemys==0){
+                this.currentLevel+=1;
+                //this.enemies = new EnemiesGroup(this.physics.world, this, this.level);//1 == nivel do jogo
+                nrTotalEnemys = this.currentLevel * this.currentLevel;
+                this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
+                
+                
+                    
+                //starts Next scene
+                //this.scene.stop("PlayGame");
+                //this.scene.start('Level', { nivel: this.level});
+
+                this.scene.restart({
+                    level: this.currentLevel });
+
+               
+            }
         });     
 
        
