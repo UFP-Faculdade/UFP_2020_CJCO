@@ -1,11 +1,12 @@
 import bootGame from './scene/BootGame.js';
 import playGame from './scene/PlayGame.js';
 
+
 var game;
 window.onload = function() {
     var gameConfig = {
         width: 480,
-        height: 640,        
+        height: 640,
         backgroundColor: 0x000000,
         scene: [bootGame, playGame],//Cria um array com valores predefinidos
         physics: {//plugins para ter gravidade
@@ -15,6 +16,7 @@ window.onload = function() {
             }
         }
     }
+
     game = new Phaser.Game(gameConfig);//classe definida para arrancar o jogo
     window.focus();
     resizeGame();
