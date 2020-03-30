@@ -204,7 +204,7 @@ export default class playGame extends Phaser.Scene{
             this.labelPointsP1.setText(this.scoreP1);
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
 
-            this.validarNumEnemies;
+            this.validarNumEnemies();
          
         });     
 
