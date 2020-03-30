@@ -1,4 +1,5 @@
-import bird from "../models/Bird.js";
+import player1 from "../models/Player1.js";
+import player2 from "../models/Player2.js";
 import EnemiesGroup from "../models/EnemiesGroup.js";
 //import enemy from "../models/Enemy.js";
 
@@ -15,15 +16,23 @@ export default class playGame extends Phaser.Scene{
     }
 
     currentLevel;
-    lives;
-    score;
+    livesP1;
+    scoreP1;
+    livesP2;
+    scoreP2;
     init(props) {
         const { level = 1 } = props
         this.currentLevel = level
-        const { lives = 3 } = props
-        this.lives = lives
-        const { score = 0 } = props
-        this.score = score
+        //Player 1
+        const { livesP1 = 3 } = props
+        this.livesP1 = livesP1
+        const { scoreP1 = 0 } = props
+        this.scoreP1 = scoreP1
+        //Player 2
+        const { livesP2 = 3 } = props
+        this.livesP2 = livesP2
+        const { scoreP2 = 0 } = props
+        this.scoreP2 = scoreP2
     }
 
     create(){
@@ -39,20 +48,34 @@ export default class playGame extends Phaser.Scene{
 
 
 
-        //criar PLAYER
-        this.bird = new bird (this, 250, 550);//Posicao da img PLAYER
+        //criar PLAYER1
+        this.player1 = new player1 (this, 200, height-90);//Posicao da img PLAYER1
         this.anims.create({
             key:'AnimShip',
             repeat:-1,
             frameRate:5,
-            frames: this.anims.generateFrameNames('playerD', {
+            frames: this.anims.generateFrameNames('playerP1', {
                 start:0, end:4
             })
         });
-        this.bird.play('AnimShip');
-        this.bird.setScale(0.6);
+        this.player1.play('AnimShip');
+        this.player1.setScale(0.6);
+        this.player1.livesP1 = this.vidasP1;
 
-        this.bird.lives = this.vidas;
+
+        //criar PLAYER2
+        this.player2 = new player2 (this, width - 50, height-90);//Posicao da img PLAYER2
+        this.anims.create({
+            key:'AnimShip',
+            repeat:-1,
+            frameRate:5,
+            frames: this.anims.generateFrameNames('playerP2', {
+                start:0, end:4
+            })
+        });
+        this.player2.play('AnimShip');
+        this.player2.setScale(0.6);
+        this.player2.livesP2 = this.vidasP2;
 
         //Animacao Bala
         this.anims.create({
@@ -65,35 +88,50 @@ export default class playGame extends Phaser.Scene{
         });
         
 
-        /**
-         * creates text for score
-         */
-        this.labelScore = this.add.text(20, 20, "Score: " + this.score, {
-            font: "25px Cambria",
+        /** TEXT PLAYER 1 */
+        this.labelNameP1 = this.add.text(20, 20, "PLAYER 1", {
+            font: "20px GlaserSteD",
             fill: "#ffffff"
         });
+        this.labelPointsP1 = this.add.text(50, 50, this.scoreP1, {
+            font: "20px GlaserSteD",
+            fill: "#FF0000"
+        });
+        this.labelLivesP1 = this.add.text(20, 80, "Lives P1: " + this.livesP1, {
+            font: "20px GlaserSteD",
+            fill: "#ffffff"
+        });
+
+        
+
+        /** TEXT PLAYER 2 */
+        this.labelNameP2 = this.add.text(width-130, 20, "PLAYER 2", {
+            font: "20px GlaserSteD",
+            fill: "#ffffff"
+        });
+        this.labelPointsP2 = this.add.text(width-100, 50, this.scoreP2, {
+            font: "20px GlaserSteD",
+            fill: "#FF0000"
+        });
+        this.labelLivesP2 = this.add.text(width-130 , 80, "Lives P2: " + this.livesP2, {
+            font: "20px GlaserSteD",
+            fill: "#ffffff"
+        });
+
 
          /**
          * create text for Levels
          */
-        this.labelLives = this.add.text(width/2-50, 20, "Level: " + this.currentLevel, {
-            font: "25px Cambria",
-            fill: "#ffffff"
-        });
-
-        /**
-         * create text for bird lives
-         */
-        this.labelLives = this.add.text(350, 20, "Lives: " + this.lives, {
-            font: "25px Cambria",
+        this.labelLevel = this.add.text(width/2, 20, "Nível: " + this.currentLevel, {
+            font: "15px GlaserSteD",
             fill: "#ffffff"
         });
 
         /**
          * create text for SILENC sound background
          */
-        this.labelLives = this.add.text(20, height - 30, "Q (Silence) ", {
-            font: "15px Cambria",
+        this.labelSound = this.add.text(20, height - 30, "Q (Silence) ", {
+            font: "13px GlaserSteD",
             fill: "#ffffff"
         });
 
@@ -102,7 +140,7 @@ export default class playGame extends Phaser.Scene{
          */
         /*
         this.labelNrTotalEnemys = this.add.text(250, height - 30, nrTotalEnemys + " Enemies", {
-            font: "15px Cambria",
+            font: "13px GlaserSteD",
             fill: "#ffffff"
         });
         */
@@ -136,19 +174,19 @@ export default class playGame extends Phaser.Scene{
          * create text for ENEMIES sound background
          */
         this.labelNrTotalEnemys = this.add.text(width/2-20, height - 30, nrTotalEnemys + " Enemies", {
-            font: "15px Cambria",
+            font: "13px GlaserSteD",
             fill: "#ffffff"
         });
 
         /**
-         * deal with overlap/collision of bird bullets and enemies
+         * deal with overlap/collision of player1 bullets and enemies
          */
-        this.physics.add.overlap(this.bird.bulletss, this.enemies, (bullet, enemy) => {
+        this.physics.add.overlap(this.player1.bulletss, this.enemies, (bullet, enemy) => {
             //bullet.destroy(); //destroy method removes object from the memory
             //enemy.destroy();
             
             this.enemies.killAndHide(enemy);
-            this.bird.bulletss.killAndHide(bullet);
+            this.player1.bulletss.killAndHide(bullet);
 
             //prevent collision with multiple enemies by removing the bullet from screen and stoping it
             bullet.removeFromScreen();
@@ -156,18 +194,18 @@ export default class playGame extends Phaser.Scene{
             //remove enemy from screen and stop it
             enemy.removeFromScreen();
 
-            this.score += this.currentLevel * this.lives * 2;//Nivel atual * Vidas atual * 2
+            this.scoreP1 += this.currentLevel * this.livesP1 * 2;//Nivel atual * Vidas atual * 2
             nrTotalEnemys -= 1;//desconta 1 enimigo
             
 
             //update the score text
-            this.labelScore.setText("Score: " + this.score);
+            this.labelPointsP1.setText(this.scoreP1);
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
 
             //Reset quando é outro nivel
             if(nrTotalEnemys==0){
                 this.currentLevel+=1;
-                this.score+=50;
+                this.scoreP1+=50;
 
                 //this.enemies = new EnemiesGroup(this.physics.world, this, this.level);//1 == nivel do jogo
                 nrTotalEnemys = this.currentLevel * this.currentLevel;
@@ -181,8 +219,10 @@ export default class playGame extends Phaser.Scene{
 
                 this.scene.restart({
                     level: this.currentLevel, 
-                    lives: this.bird.lives,
-                    score: this.score
+                    livesP1: this.player1.livesP1,
+                    scoreP1: this.scoreP1, 
+                    livesP2: this.player1.livesP2,
+                    scoreP2: this.scoreP2
                 });
 
                
@@ -190,16 +230,85 @@ export default class playGame extends Phaser.Scene{
 
             /*
             //Se falhar a bala (Se sair do ecrã)
-            this.bird.bulletss.children.iterate(function(bullet){
+            this.player1.bulletss.children.iterate(function(bullet){
                 
                 if(bullet.isOutsideCanvas()){
                     console.log("FORAAAA");
-                    this.score -= 2 ;
+                    this.scoreP1 -= 2 ;
                 }
             }, this)//devido ao objeto
             */
-        
+         
         });     
+
+
+        
+
+        /**
+         * deal with overlap/collision of player1 bullets and enemies
+         */
+        this.physics.add.overlap(this.player2.bulletss, this.enemies, (bullet, enemy) => {
+            //bullet.destroy(); //destroy method removes object from the memory
+            //enemy.destroy();
+            
+            this.enemies.killAndHide(enemy);
+            this.player2.bulletss.killAndHide(bullet);
+
+            //prevent collision with multiple enemies by removing the bullet from screen and stoping it
+            bullet.removeFromScreen();
+
+            //remove enemy from screen and stop it
+            enemy.removeFromScreen();
+
+            this.scoreP2 += this.currentLevel * this.livesP2 * 2;//Nivel atual * Vidas atual * 2
+            nrTotalEnemys -= 1;//desconta 1 enimigo
+            
+
+            //update the score text
+            this.labelPointsP2.setText(this.scoreP2);
+            this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
+
+            //Reset quando é outro nivel
+            if(nrTotalEnemys==0){
+                this.currentLevel+=1;
+                this.scoreP2+=50;
+
+                //this.enemies = new EnemiesGroup(this.physics.world, this, this.level);//1 == nivel do jogo
+                nrTotalEnemys = this.currentLevel * this.currentLevel;
+                this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
+                
+                
+                    
+                //starts Next scene
+                //this.scene.stop("PlayGame");
+                //this.scene.start('Level', { nivel: this.level});
+
+                this.scene.restart({
+                    level: this.currentLevel, 
+                    livesP1: this.player1.livesP1,
+                    scoreP1: this.scoreP1, 
+                    livesP2: this.player1.livesP2,
+                    scoreP2: this.scoreP2
+                });
+
+               
+            }
+
+            /*
+            //Se falhar a bala (Se sair do ecrã)
+            this.player1.bulletss.children.iterate(function(bullet){
+                
+                if(bullet.isOutsideCanvas()){
+                    console.log("FORAAAA");
+                    this.scoreP1 -= 2 ;
+                }
+            }, this)//devido ao objeto
+            */
+         
+        });     
+
+
+
 
        
 
@@ -213,7 +322,7 @@ export default class playGame extends Phaser.Scene{
             volume: 0.1
         });
 
-        this.bird.fireSound = fireSound;
+        this.player1.fireSound = fireSound;
 
         this.game.paused = false;
 
@@ -225,11 +334,12 @@ export default class playGame extends Phaser.Scene{
         bg.tilePositionX = Math.fround(iter) * 40;
         iter += bgSpeed;
 
-        //if (this.bird.lives > 0) {
+        //if (this.player1.lives > 0) {
             //deal with enemies spawn rate
             //this.spawnNewEnemies();
 
-            this.bird.update(this.cursors, time);
+            this.player1.update(this.cursors, time);
+            this.player2.update(this.cursors, time);
 
             this.enemies.children.iterate(function (enemy) {
                 if (enemy.isOutsideCanvas()) {

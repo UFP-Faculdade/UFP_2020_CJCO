@@ -1,9 +1,9 @@
 import Bullet from './Bullet.js';
 import Explosion from './Explosion.js';
 
-export default class bird extends Phaser.Physics.Arcade.Sprite{
+export default class player2 extends Phaser.Physics.Arcade.Sprite{
     constructor(scene, x, y){
-        super(scene, x, y, "playerD");
+        super(scene, x, y, "playerP2");
         this.scene.add.existing(this);
         //enable physics wo sprite
         this.scene.physics.world.enable(this);
@@ -85,13 +85,13 @@ export default class bird extends Phaser.Physics.Arcade.Sprite{
 
     
     /**
-     * create an explosion, decrease one life, prevent a new collision and put the bird off-screen
+     * create an explosion, decrease one life, prevent a new collision and put the player2 off-screen
      */
-    dead() {
+    deadP1() {
         let x = this.x;
         let y = this.y;
         new Explosion(this.scene, x, y);
-        this.lives -= 1;
+        this.livesP1 -= 1;
 
         //prevents new collision
         this.canBeKilled = false;
@@ -103,9 +103,9 @@ export default class bird extends Phaser.Physics.Arcade.Sprite{
 
     
     /**
-     * replace the bird on-screen, change the bird color (tint) and re-enable collisions
+     * replace the player2 on-screen, change the player2 color (tint) and re-enable collisions
      */
-    revive() {
+    reviveP2() {
 
         this.x = 100;
         this.y = 100;
@@ -115,7 +115,7 @@ export default class bird extends Phaser.Physics.Arcade.Sprite{
         let changeTint = true;
 
         /**
-         * timer to change the bird's color/tint 
+         * timer to change the player2's color/tint 
          */
         this.scene.time.addEvent({
             repeat: repetition,

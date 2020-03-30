@@ -42,7 +42,7 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
             let bullet=this.bulletss.getFirstDead(true, this.x, this.y, "bullet");
             if(bullet){//Apos disparar 5 vezes bloqueia
                 
-                bullet.fire_to_player(this.scene.bird);
+                bullet.fire_to_player(this.scene.player1);
                 bullet.setScale(1.25);
                 
                 //bullet.setBounce(0.8);//Quando bater, perde lanço

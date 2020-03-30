@@ -6,17 +6,18 @@ export default class bootGame extends Phaser.Scene{
         this.load.image("bg", "assets/images/background.png");//Background image
         //spritesheet=varias imagens no mesmo ficheiro
         
-        this.load.spritesheet("playerDw","assets/images/phoenixNave.png",{
-            frameWidth:100,
-            frameHeight:100
-        });
-        
-        
-        this.load.spritesheet("playerD","assets/ships/PNG/playerShip/playerShipSprite1.png",{
+        //Players
+        this.load.spritesheet("playerP1","assets/ships/PNG/playerShip/playerShipSprite1.png",{
             frameWidth:99,
             frameHeight:75
         });
         
+        this.load.spritesheet("playerP2","assets/ships/PNG/playerShip/playerShipSprite2.png",{
+            frameWidth:112,
+            frameHeight:75
+        });
+        
+        //Enimigos
         this.load.spritesheet("enemy1","assets/ships/PNG/Enemies/enemySprite1.png",{
             frameWidth:93,
             frameHeight:84
