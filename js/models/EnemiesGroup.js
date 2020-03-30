@@ -21,8 +21,8 @@ export default class EnemiesGroup extends Phaser.Physics.Arcade.Group {
 
       switch(level) {
         case 1:
-          var MatrixLevel = [[1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1]];
+          var MatrixLevel = [[1,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
+                            [0,0,0,0,0,0,0,0],[0,0,0,0,1,0,0,0],[0,0,0,0,1,0,0,0]];
                     
           break;
         case 2:
@@ -39,24 +39,24 @@ export default class EnemiesGroup extends Phaser.Physics.Arcade.Group {
           break;    
         default:
             var MatrixLevel = [[1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1],[0,0,0,1,1,1,1,0],[1,1,0,1,0,1,1,0]];
+                              [1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1]];
       }
 
 
       
-      const linhas = 8;
-      const colunas = 6;
+      const linhas = 6;
+      const colunas = 8;
       const width = this.scene.game.config.width;
       const height = this.scene.game.config.height;
       const width_enemy = (width / colunas);
-      const height_enemy = (height / 2 / linhas);                    
+      const height_enemy = (height / 2 / linhas - 10);                    
 
-      for (let i = 0; i < linhas; i++) {
-        for (let j = 0; j < colunas; j++) {      
+      for (let i = 0; i < colunas; i++) {
+        for (let j = 0; j < linhas; j++) {      
           if (MatrixLevel[j][i] == 1)
           {
             this.nrnaves+=1;
-            let child = new enemy(scene, 30 + (i * width_enemy), 150 + (j * height_enemy),level);
+            let child = new enemy(scene, 30 + (i * width_enemy), 140 + (j * height_enemy), level);
             //child.active = false;
             this.add(child);
 

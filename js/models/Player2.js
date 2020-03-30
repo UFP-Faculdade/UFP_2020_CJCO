@@ -63,6 +63,9 @@ export default class player2 extends Phaser.Physics.Arcade.Sprite{
         const width=this.scene.game.config.width;//Diz local da imagem
         const height=this.scene.game.config.height;//Diz local da imagem
         const velocityy = 200;
+
+
+
         if(cursors.down.isDown && this.y<height-this.frame.halfHeight-25){//Quando carrega em DOWN e não passar do ecra
             this.setVelocityY(velocityy);
         }
