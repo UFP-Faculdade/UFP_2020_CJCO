@@ -1,5 +1,5 @@
-import player1 from "../models/Player1.js";
-import player2 from "../models/Player2.js";
+import Player1 from "../models/Player1.js";
+import Player2 from "../models/Player2.js";
 import EnemiesGroup from "../models/EnemiesGroup.js";
 //import enemy from "../models/Enemy.js";
 
@@ -16,25 +16,19 @@ export default class playGame extends Phaser.Scene{
     }
 
     currentLevel;
-    livesP1;
     scoreP1;
-    livesP2;
     scoreP2;
     init(props) {
         const { level = 1 } = props
         this.currentLevel = level
         //Player 1
-        const { livesP1 = 3 } = props
-        this.livesP1 = livesP1
         const { scoreP1 = 0 } = props
         this.scoreP1 = scoreP1
         //Player 2
-        const { livesP2 = 3 } = props
-        this.livesP2 = livesP2
         const { scoreP2 = 0 } = props
         this.scoreP2 = scoreP2
     }
-
+    
     create(){
         console.log("Starting game");
         
@@ -49,7 +43,7 @@ export default class playGame extends Phaser.Scene{
 
 
         //criar PLAYER1
-        this.player1 = new player1 (this, 200, height-90);//Posicao da img PLAYER1
+        this.player1 = new Player1 (this, 200, height-90);//Posicao da img PLAYER1
         this.anims.create({
             key:'AnimShip',
             repeat:-1,
@@ -60,11 +54,11 @@ export default class playGame extends Phaser.Scene{
         });
         this.player1.play('AnimShip');
         this.player1.setScale(0.6);
-        this.player1.livesP1 = this.vidasP1;
+        //this.player1.livesP1 = this.vidasP1;
 
 
         //criar PLAYER2
-        this.player2 = new player2 (this, width - 50, height-90);//Posicao da img PLAYER2
+        this.player2 = new Player2 (this, width - 50, height-90);//Posicao da img PLAYER2
         this.anims.create({
             key:'AnimShip',
             repeat:-1,
@@ -75,7 +69,6 @@ export default class playGame extends Phaser.Scene{
         });
         this.player2.play('AnimShip');
         this.player2.setScale(0.6);
-        this.player2.livesP2 = this.vidasP2;
 
         //Animacao Bala
         this.anims.create({
@@ -97,7 +90,7 @@ export default class playGame extends Phaser.Scene{
             font: "20px magv5",
             fill: "#FF0000"
         });
-        this.labelLivesP1 = this.add.text(20, 80, "Lives: " + this.livesP1, {
+        this.labelLivesP1 = this.add.text(20, 80, "Lives: " + this.player1.livesP1, {
             font: "20px magv5",
             fill: "#ffffff"
         });
@@ -113,7 +106,7 @@ export default class playGame extends Phaser.Scene{
             font: "20px magv5",
             fill: "#FF0000"
         });
-        this.labelLivesP2 = this.add.text(width-130 , 80, "Lives: " + this.livesP2, {
+        this.labelLivesP2 = this.add.text(width-130 , 80, "Lives: " + this.player2.livesP2, {
             font: "20px magv5",
             fill: "#ffffff"
         });
@@ -196,7 +189,7 @@ export default class playGame extends Phaser.Scene{
             //remove enemy from screen and stop it
             enemy.removeFromScreen();
 
-            this.scoreP1 += this.currentLevel * this.livesP1 * 2;//Nivel atual * Vidas atual * 2
+            this.scoreP1 += this.currentLevel * this.player1.livesP1 * 2;//Nivel atual * Vidas atual * 2
             nrTotalEnemys -= 1;//desconta 1 enimigo
             
 
@@ -227,7 +220,7 @@ export default class playGame extends Phaser.Scene{
             //remove enemy from screen and stop it
             enemy.removeFromScreen();
 
-            this.scoreP2 += this.currentLevel * this.livesP2 * 2;//Nivel atual * Vidas atual * 2
+            this.scoreP2 += this.currentLevel * this.player2.livesP2 * 2;//Nivel atual * Vidas atual * 2
             nrTotalEnemys -= 1;//desconta 1 enimigo
             
 
@@ -244,23 +237,37 @@ export default class playGame extends Phaser.Scene{
 
 
         
-        /**
-         * deal with overlap/collision of PLAYER1 and ENEMIES
-         */
+        /** PLAYER 1 embate no ENIMIGO */
         this.physics.add.overlap(this.player1, this.enemies, (player1, enemy) => {
-            //console.log("crash!");
-            //if (player1.canBeKilled) {
-                console.log("crash!");
+            console.log("Crash Player 1. Restam " + (player1.livesP1-1) + " vidas.");
+            if (player1.canBeKilled) {
 
                 player1.deadP1();
                 this.labelLivesP1.setText("Lives: " + player1.livesP1);
                 this.time.addEvent({
                     delay: 1000,
                     callback: () => {
-                        player1.revive();
+                        player1.reviveP1();
                     }
                 });
-            //}
+            }
+        });
+
+
+        /** PLAYER 2 embate no ENIMIGO */
+        this.physics.add.overlap(this.player2, this.enemies, (player2, enemy) => {
+            console.log("Crash Player 2. Restam " + (player2.livesP2-1) + " vidas.");
+            if (player2.canBeKilled) {
+
+                player2.deadP2();
+                this.labelLivesP2.setText("Lives: " + player2.livesP2);
+                this.time.addEvent({
+                    delay: 1000,
+                    callback: () => {
+                        player2.reviveP2();
+                    }
+                });
+            }
         });
 
 
@@ -295,11 +302,7 @@ export default class playGame extends Phaser.Scene{
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
             
             
-                
-            //starts Next scene
-            //this.scene.stop("PlayGame");
-            //this.scene.start('Level', { nivel: this.level});
-
+            /*
             this.scene.restart({
                 level: this.currentLevel, 
                 livesP1: this.player1.livesP1,
@@ -307,7 +310,7 @@ export default class playGame extends Phaser.Scene{
                 livesP2: this.player1.livesP2,
                 scoreP2: this.scoreP2
             });
-
+            */
            
         }
     }
@@ -319,7 +322,7 @@ export default class playGame extends Phaser.Scene{
         bg.tilePositionX = Math.fround(iter) * 40;
         iter += bgSpeed;
 
-        //if (this.player1.lives > 0) {
+        if (this.player1.livesP1 > 0 && this.player2.livesP2 > 0) {
             //deal with enemies spawn rate
             //this.spawnNewEnemies();
 
@@ -362,6 +365,6 @@ export default class playGame extends Phaser.Scene{
                 console.log("Pausa")
             } 
             */
-        //}
+        }
     }
 }
