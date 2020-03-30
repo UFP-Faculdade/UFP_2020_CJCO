@@ -90,15 +90,15 @@ export default class playGame extends Phaser.Scene{
 
         /** TEXT PLAYER 1 */
         this.labelNameP1 = this.add.text(20, 20, "PLAYER 1", {
-            font: "20px GlaserSteD",
+            font: "20px magv5",
             fill: "#ffffff"
         });
         this.labelPointsP1 = this.add.text(50, 50, this.scoreP1, {
-            font: "20px GlaserSteD",
+            font: "20px magv5",
             fill: "#FF0000"
         });
-        this.labelLivesP1 = this.add.text(20, 80, "Lives P1: " + this.livesP1, {
-            font: "20px GlaserSteD",
+        this.labelLivesP1 = this.add.text(20, 80, "Lives: " + this.livesP1, {
+            font: "20px magv5",
             fill: "#ffffff"
         });
 
@@ -106,15 +106,15 @@ export default class playGame extends Phaser.Scene{
 
         /** TEXT PLAYER 2 */
         this.labelNameP2 = this.add.text(width-130, 20, "PLAYER 2", {
-            font: "20px GlaserSteD",
+            font: "20px magv5",
             fill: "#ffffff"
         });
         this.labelPointsP2 = this.add.text(width-100, 50, this.scoreP2, {
-            font: "20px GlaserSteD",
+            font: "20px magv5",
             fill: "#FF0000"
         });
-        this.labelLivesP2 = this.add.text(width-130 , 80, "Lives P2: " + this.livesP2, {
-            font: "20px GlaserSteD",
+        this.labelLivesP2 = this.add.text(width-130 , 80, "Lives: " + this.livesP2, {
+            font: "20px magv5",
             fill: "#ffffff"
         });
 
@@ -122,8 +122,8 @@ export default class playGame extends Phaser.Scene{
          /**
          * create text for Levels
          */
-        this.labelLevel = this.add.text(width/2, 20, "Nível: " + this.currentLevel, {
-            font: "15px GlaserSteD",
+        this.labelLevel = this.add.text(width/2-20, 20, "Nível " + this.currentLevel, {
+            font: "15px magv5",
             fill: "#ffffff"
         });
 
@@ -131,7 +131,7 @@ export default class playGame extends Phaser.Scene{
          * create text for SILENC sound background
          */
         this.labelSound = this.add.text(20, height - 30, "Q (Silence) ", {
-            font: "13px GlaserSteD",
+            font: "13px magv5",
             fill: "#ffffff"
         });
 
@@ -140,14 +140,13 @@ export default class playGame extends Phaser.Scene{
          */
         /*
         this.labelNrTotalEnemys = this.add.text(250, height - 30, nrTotalEnemys + " Enemies", {
-            font: "13px GlaserSteD",
+            font: "13px magv5",
             fill: "#ffffff"
         });
         */
         this.cursors=this.input.keyboard.createCursorKeys();
         this.q = this.input.keyboard.addKey("q");
         this.p = this.input.keyboard.addKey("p");
-
         
         //criar ENEMY
         //this.enemies = new EnemiesGroup(this.physics.world, this, 10,8);
@@ -174,7 +173,7 @@ export default class playGame extends Phaser.Scene{
          * create text for ENEMIES sound background
          */
         this.labelNrTotalEnemys = this.add.text(width/2-20, height - 30, nrTotalEnemys + " Enemies", {
-            font: "13px GlaserSteD",
+            font: "13px magv5",
             fill: "#ffffff"
         });
 
@@ -202,42 +201,7 @@ export default class playGame extends Phaser.Scene{
             this.labelPointsP1.setText(this.scoreP1);
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
 
-            //Reset quando é outro nivel
-            if(nrTotalEnemys==0){
-                this.currentLevel+=1;
-                this.scoreP1+=50;
-
-                //this.enemies = new EnemiesGroup(this.physics.world, this, this.level);//1 == nivel do jogo
-                nrTotalEnemys = this.currentLevel * this.currentLevel;
-                this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
-                
-                
-                    
-                //starts Next scene
-                //this.scene.stop("PlayGame");
-                //this.scene.start('Level', { nivel: this.level});
-
-                this.scene.restart({
-                    level: this.currentLevel, 
-                    livesP1: this.player1.livesP1,
-                    scoreP1: this.scoreP1, 
-                    livesP2: this.player1.livesP2,
-                    scoreP2: this.scoreP2
-                });
-
-               
-            }
-
-            /*
-            //Se falhar a bala (Se sair do ecrã)
-            this.player1.bulletss.children.iterate(function(bullet){
-                
-                if(bullet.isOutsideCanvas()){
-                    console.log("FORAAAA");
-                    this.scoreP1 -= 2 ;
-                }
-            }, this)//devido ao objeto
-            */
+            this.validarNumEnemies;
          
         });     
 
@@ -268,49 +232,34 @@ export default class playGame extends Phaser.Scene{
             this.labelPointsP2.setText(this.scoreP2);
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
 
-            //Reset quando é outro nivel
-            if(nrTotalEnemys==0){
-                this.currentLevel+=1;
-                this.scoreP2+=50;
+            this.validarNumEnemies();
 
-                //this.enemies = new EnemiesGroup(this.physics.world, this, this.level);//1 == nivel do jogo
-                nrTotalEnemys = this.currentLevel * this.currentLevel;
-                this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
-                
-                
-                    
-                //starts Next scene
-                //this.scene.stop("PlayGame");
-                //this.scene.start('Level', { nivel: this.level});
-
-                this.scene.restart({
-                    level: this.currentLevel, 
-                    livesP1: this.player1.livesP1,
-                    scoreP1: this.scoreP1, 
-                    livesP2: this.player1.livesP2,
-                    scoreP2: this.scoreP2
-                });
-
-               
-            }
-
-            /*
-            //Se falhar a bala (Se sair do ecrã)
-            this.player1.bulletss.children.iterate(function(bullet){
-                
-                if(bullet.isOutsideCanvas()){
-                    console.log("FORAAAA");
-                    this.scoreP1 -= 2 ;
-                }
-            }, this)//devido ao objeto
-            */
          
-        });     
+        });
+        
 
 
 
+        
+        /**
+         * deal with overlap/collision of PLAYER1 and ENEMIES
+         */
+        this.physics.add.overlap(this.player1, this.enemies, (player1, enemy) => {
+            //console.log("crash!");
+            //if (player1.canBeKilled) {
+                console.log("crash!");
 
-       
+                player1.deadP1();
+                this.labelLivesP1.setText("Lives: " + player1.livesP1);
+                this.time.addEvent({
+                    delay: 1000,
+                    callback: () => {
+                        player1.revive();
+                    }
+                });
+            //}
+        });
+
 
 
 
@@ -328,6 +277,38 @@ export default class playGame extends Phaser.Scene{
 
     }
     
+    
+    validarNumEnemies() 
+    {
+        //Reset quando é outro nivel
+        if(nrTotalEnemys==0){
+            this.currentLevel+=1;
+            this.scoreP1+=50;
+            this.scoreP2+=50;
+
+            //this.enemies = new EnemiesGroup(this.physics.world, this, this.level);//1 == nivel do jogo
+            nrTotalEnemys = this.currentLevel * this.currentLevel;
+            this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
+            
+            
+                
+            //starts Next scene
+            //this.scene.stop("PlayGame");
+            //this.scene.start('Level', { nivel: this.level});
+
+            this.scene.restart({
+                level: this.currentLevel, 
+                livesP1: this.player1.livesP1,
+                scoreP1: this.scoreP1, 
+                livesP2: this.player1.livesP2,
+                scoreP2: this.scoreP2
+            });
+
+           
+        }
+    }
+
+
     update(time, delta){
         //Mover o background
         bg.tilePositionY = -Math.fround(iter) * 150;
@@ -363,7 +344,7 @@ export default class playGame extends Phaser.Scene{
                 this.music=!this.music;
                 console.log("MUSIC: "+this.music);
             }
-/*
+            /*
             if(this.p.isDown==true )
             { 
                 if (this.game.paused) { 
@@ -376,7 +357,7 @@ export default class playGame extends Phaser.Scene{
                 this.game.paused=!this.game.paused;
                 console.log("Pausa")
             } 
-*/
+            */
         //}
     }
 }
