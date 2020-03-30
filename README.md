@@ -4,8 +4,8 @@ UFP 2020 Computação Jogos
 ### Informação no ecrã
 * ✔️ Pontuação do Player 1
 * ✔️ Vidas do Player 1
-* ❌ Pontuação do Player 2
-* ❌ Vidas do Player 2
+* ✔️ Pontuação do Player 2
+* ✔️ Vidas do Player 2
 * ✔️ Nivel do Jogo
 
 ### Pontuação
@@ -16,7 +16,7 @@ UFP 2020 Computação Jogos
 ### Perda de Vidas
 * ❌ Irá inicialmente perder o escudo caso tenha o Bónus
 * ❌ No momento em que a bala do enimigo embater na nave do Player
-* ❌ Sempre que a nave do Player embater contra um enimigo
+* ✔️ Sempre que a nave do Player embater contra um enimigo
 
 ### Subir de nivel
 * ✔️ Aumenta o numero de naves / Sequencia diferente
@@ -26,7 +26,7 @@ UFP 2020 Computação Jogos
 ### Sons do Jogo
 * ✔️ Musica de Jogo / Background
 * ✔️ Disparo da nave do Player 1
-* ❌ Disparo da nave do Player 2
+* ✔️ Disparo da nave do Player 2
 
 ### Bónus
 * ❌ Ganhar um Escudo
@@ -39,7 +39,6 @@ UFP 2020 Computação Jogos
 
 ### Por desenvolver
 * ❌ Disparar random do enimigo
-* ❌ Criar um segundo Player
 * ❌ Pause e resume
 * ❌ Criar o boss
 
