@@ -55,9 +55,11 @@ export default class bootGame extends Phaser.Scene{
             frameHeight: 64,
         });
 
-        this.load.audio("fire", "assets/song/fire-sound.mp3");
+        //this.load.audio("fire", "assets/song/fire-sound.mp3");
+        this.load.audio("fire", "assets/sounds/Weapons/Lasers/sfx_wpn_laser5.wav");
         this.load.audio("theme", "assets/song/start_8bit.mp3");
         this.load.audio("gameover", "assets/song/gameover.mp3");
+
 
     }
     create(){

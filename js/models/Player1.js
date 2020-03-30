@@ -18,11 +18,6 @@ export default class player1 extends Phaser.Physics.Arcade.Sprite{
             classType:Bullet
         });
 
-
-
-        
-
-
     }
 
     update(cursors, time){
