@@ -27,12 +27,12 @@ export default class bulletE extends Phaser.Physics.Arcade.Sprite{
         this.setScale(0.5);
     }
 
-    fire_to_player(bird){//Dispara em direção ao PLAYER
+    fire_to_player(player1){//Dispara em direção ao PLAYER
         
         
         
-        const dx = bird.x - this.x;
-        const dy = bird.y - this.y;
+        const dx = player1.x - this.x;
+        const dy = player1.y - this.y;
 
         const alpha=Math.atan2(dy, dx);//Angolo da bala
         const vx=this.baseVelocity * Math.cos(alpha);
