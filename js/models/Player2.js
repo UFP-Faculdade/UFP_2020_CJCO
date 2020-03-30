@@ -28,10 +28,10 @@ export default class Player2 extends Phaser.Physics.Arcade.Sprite{
 
     }
 
-    update(cursors, time){
+    update(Keys, time){
         //acrescentei esta linha teste github
         
-        if(cursors.space.isDown && this.timeToShoot < time){ //Disparar a bala
+        if(Keys.x.isDown && this.timeToShoot < time){ //Disparar a bala
 
             let bullet=this.bulletss.getFirstDead(true, this.x, this.y, "bulletE");
 
@@ -69,20 +69,20 @@ export default class Player2 extends Phaser.Physics.Arcade.Sprite{
 
 
 
-        if(cursors.down.isDown && this.y<height-this.frame.halfHeight-25){//Quando carrega em DOWN e não passar do ecra
+        if(Keys.s.isDown && this.y<height-this.frame.halfHeight-25){//Quando carrega em DOWN e não passar do ecra
             this.setVelocityY(velocityy);
         }
-        if(cursors.up.isDown && this.y>this.frame.halfHeight +50){
+        if(Keys.w.isDown && this.y>this.frame.halfHeight +50){
             this.setVelocityY(-velocityy);
         }
 
         //if(cursors.left.isDown && this.x>this.frame.halfWidth){
-        if(cursors.left.isDown && this.x>10){
+        if(Keys.a.isDown && this.x>10){
 
             this.setVelocityX(-velocityy);
         }
         //if(cursors.right.isDown && this.x<width-this.frame.halfWidth){
-        if(cursors.right.isDown && this.x<width-10){    
+        if(Keys.d.isDown && this.x<width-10){    
             this.setVelocityX(velocityy);
         }
 
