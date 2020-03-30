@@ -10,7 +10,7 @@ UFP 2020 Computação Jogos
 
 ### Pontuação
 * ✔️ Ao acertar no enimigo faz o seguinte calculo de pontos: **Nivel Atual * Vidas Restantes * 2**
-* ✔️ Por cada bala falhada ao emimigo irá perder 2 pontos
+* ❌ Por cada bala falhada ao emimigo irá perder 2 pontos
 * ✔️ Sempre que avançar um nivel ganhará 50 pontos
 
 ### Perda de Vidas
