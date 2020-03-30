@@ -1,33 +1,51 @@
 # UFP_2020_CJCO
 UFP 2020 Computação Jogos
 
-[OK] Som musica
+### Informação no ecrã
+* Pontuação do Player 1 [OK]
+* Vidas do Player 1 [OK]
+* Pontuação do Player 2 []
+* Vidas do Player 2 []
+* Nivel do Jogo [OK]
 
-[OK] Som tiros da nave
+### Pontuação
+* Ao acertar no enimigo faz o seguinte calculo de pontos: **Nivel Atual * Vidas Restantes * 2** [OK]
+* Por cada bala falhada ao emimigo irá perder 2 pontos [OK]
+* Sempre que avançar um nivel ganhará 50 pontos [OK]
 
-[OK] Acertar com explusao
+### Perda de Vidas
+* Irá inicialmente perder o escudo caso tenha o Bónus []
+* No momento em que a bala do enimigo embater na nave do Player []
+* Sempre que a nave do Player embater contra um enimigo []
 
-[OK] Ecrã Pontos, vidas e niveis
+### Subir de nivel
+* Aumenta o numero de naves / Sequencia diferente [OK]
+* Aumentar velocidade disparo bala do Enimigo para o Player []
+* Aumentar o numero de balas do Enimigo para o Player []
 
-[OK] Multiplicar as naves
+### Sons do Jogo
+* Musica de Jogo / Background [OK]
+* Disparo da nave do Player 1 [OK]
+* Disparo da nave do Player 2 []
 
-[OK] Naves animadas
+### Bónus
+* Ganhar um Escudo []
+* Ganhar 3 tiros []
+* Ganhar uma vida extra []
 
-[] Perder vidas
-***1* Perder escudo
-***2* Perder a vida (-1)
+### Teclas de Atalho
+* Tecla "Q" de iniciar/parar a musica de jogo []
+* Tecla "P" para suspender o jogo []
 
-[] Aumentar nivel
-*** Aumentar nr naves
-*** Aumentar velocidade disparo bala || Enimigo > Nave []
-*** Aumentar nr balas || Enimigo > Nave []
+### Por desenvolver
+* [] Disparar random do enimigo
+* [] Criar um segundo Player
+* [] Pause e resume
+* [] Criar o boss
 
-[] Disparar random
 
-[] Criar bonus das naves (azul=escudo, vermelho=3 tiros, verde=+1 vida);
 
-[] Criar um segundo Player
 
-[] Pause e resume
-
-[] Criar o boss
+## Authors
+* Leonel Ferreira
+* Tiago Correia
