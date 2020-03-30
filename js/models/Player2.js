@@ -1,13 +1,14 @@
 import Bullet from './Bullet.js';
 import Explosion from './Explosion.js';
 
-export default class player2 extends Phaser.Physics.Arcade.Sprite{
+export default class Player2 extends Phaser.Physics.Arcade.Sprite{
     constructor(scene, x, y){
         super(scene, x, y, "playerP2");
         this.scene.add.existing(this);
         //enable physics wo sprite
         this.scene.physics.world.enable(this);
         
+        this.livesP2 = 3;
         this.timeToShoot=0;//devido à bala do passaro
         this.fireRate = 500;
         this.bulletsMaxSize=5;
@@ -18,6 +19,8 @@ export default class player2 extends Phaser.Physics.Arcade.Sprite{
             classType:Bullet
         });
 
+        //used to create an invencibility time window after a death
+        this.canBeKilled = true;
 
 
         
@@ -90,11 +93,11 @@ export default class player2 extends Phaser.Physics.Arcade.Sprite{
     /**
      * create an explosion, decrease one life, prevent a new collision and put the player2 off-screen
      */
-    deadP1() {
+    deadP2() {
         let x = this.x;
         let y = this.y;
         new Explosion(this.scene, x, y);
-        this.livesP1 -= 1;
+        this.livesP2 -= 1;
 
         //prevents new collision
         this.canBeKilled = false;
@@ -110,8 +113,11 @@ export default class player2 extends Phaser.Physics.Arcade.Sprite{
      */
     reviveP2() {
 
-        this.x = 100;
-        this.y = 100;
+        const width = this.scene.game.config.width;
+        const height = this.scene.game.config.height;
+       
+        this.x = (width - 100);
+        this.y = (height - 100);
 
         let i = 0;
         let repetition = 200
