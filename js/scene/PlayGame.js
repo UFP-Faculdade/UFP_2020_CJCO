@@ -135,12 +135,15 @@ export default class playGame extends Phaser.Scene{
         this.labelNrTotalEnemys = this.add.text(250, height - 30, nrTotalEnemys + " Enemies", {
             font: "13px magv5",
             fill: "#ffffff"
-        });
+        });z
         */
-        this.cursors=this.input.keyboard.createCursorKeys();
+        this.cursors = this.input.keyboard.createCursorKeys();
+        //this.keysP1 = this.input.keyboard.addKeys('w,s,a,d')
+        this.keysP2 = this.input.keyboard.addKeys('w,s,a,d,x');
         this.q = this.input.keyboard.addKey("q");
         this.p = this.input.keyboard.addKey("p");
-        
+
+
         //criar ENEMY
         //this.enemies = new EnemiesGroup(this.physics.world, this, 10,8);
         this.enemies = new EnemiesGroup(this.physics.world, this, this.currentLevel);//1 == nivel do jogo
@@ -194,7 +197,7 @@ export default class playGame extends Phaser.Scene{
             this.labelPointsP1.setText(this.scoreP1);
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
 
-            this.validarNumEnemies;
+            this.validarNumEnemies();
          
         });     
 
@@ -279,6 +282,7 @@ export default class playGame extends Phaser.Scene{
         });
 
         this.player1.fireSound = fireSound;
+        this.player2.fireSound = fireSound;
 
         this.game.paused = false;
 
@@ -323,7 +327,7 @@ export default class playGame extends Phaser.Scene{
             //this.spawnNewEnemies();
 
             this.player1.update(this.cursors, time);
-            this.player2.update(this.cursors, time);
+            this.player2.update(this.keysP2, time);
 
             this.enemies.children.iterate(function (enemy) {
                 if (enemy.isOutsideCanvas()) {
