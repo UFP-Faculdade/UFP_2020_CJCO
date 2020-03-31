@@ -13,13 +13,9 @@ export default class bulletE extends Phaser.Physics.Arcade.Sprite{
     fire_to_enemy(){//Dispara em direção ao enimigo
         this.setVelocityY(-200);
 
-
         this.active = true;  
         this.visible = true;
         this.play('AnimBullet');
-        
-
-
         
        // this.setBounce(0.8);
         //this.setCollideWorldBounds(true);
@@ -57,6 +53,13 @@ export default class bulletE extends Phaser.Physics.Arcade.Sprite{
         const height=this.scene.game.config.height;//Diz local da imagem
         
         return this.x > width | this.y > height || this.x<0 || this.y<0;
+    }
+
+    isInsideCanvas100(){
+        const width=this.scene.game.config.width;//Diz local da imagem
+        //const height=this.scene.game.config.height;//Diz local da imagem
+        
+        return this.x>0 || this.x<width || this.y>0 || this.y<10;
     }
 
 }

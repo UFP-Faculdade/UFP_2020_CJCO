@@ -8,7 +8,9 @@ export default class Player1 extends Phaser.Physics.Arcade.Sprite{
         //enable physics wo sprite
         this.scene.physics.world.enable(this);
         
+        
         this.livesP1 = 3;
+        this.scoreP1 = 0;
         this.timeToShoot=0;//devido à bala do passaro
         this.fireRate = 500;
         this.bulletsMaxSize=5;
@@ -23,6 +25,12 @@ export default class Player1 extends Phaser.Physics.Arcade.Sprite{
         this.canBeKilled = true;
 
 
+    }
+
+    setValues(pontos, vidas)
+    {
+        this.scoreP1 = pontos;
+        this.livesP1 = vidas;
     }
 
     update(cursors, time){
@@ -51,13 +59,14 @@ export default class Player1 extends Phaser.Physics.Arcade.Sprite{
             const height=this.scene.game.config.height;//Diz local da imagem
         
             if(bullet.isOutsideCanvas()){ //se bala for maior que tamanho do ecra
-                //bullet.active = false;//coloca a 0 nr balas
-                //this. -=2; //Retirar pontos por cada bala falhada
+                
                 this.bulletss.killAndHide(bullet);
+                //this.scoreP1 -= 2;
+                console.log("123abc");
             }
         }, this)//devido ao objeto
         
-        
+
         //MOVER O PLAYER
         this.setVelocity(0);
         const width=this.scene.game.config.width;//Diz local da imagem

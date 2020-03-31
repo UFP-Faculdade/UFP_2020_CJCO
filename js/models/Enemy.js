@@ -6,13 +6,13 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
         
         //console.log("enemy"+level);
         super(scene, x, y, "enemy"+level);
-     
+        
         this.scene.add.existing(this);
         //enable physics wo sprite
         this.scene.physics.world.enable(this);
         
         this.timeToShoot=0;//devido à bala do passaro
-        this.fireRate = 100;
+        this.fireRate = 3000;
         this.bulletsMaxSize=1;
         this.setScale(0.4);
 
@@ -42,14 +42,14 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
             let bullet=this.bulletss.getFirstDead(true, this.x, this.y, "bullet");
             if(bullet){//Apos disparar 5 vezes bloqueia
                 
-                bullet.fire_to_player(this.scene.player1);
+                var valueRandom = Phaser.Math.Between(1, 2);
+                if(valueRandom==1){
+                    bullet.fire_to_player(this.scene.player1);
+                }else{
+                    bullet.fire_to_player(this.scene.player2);
+                }
                 bullet.setScale(1.25);
                 
-                //bullet.setBounce(0.8);//Quando bater, perde lanço
-                //bullet.setCollideWorldBounds(true);
-                
-
-
 
             }
             this.timeToShoot= time + this.fireRate;
