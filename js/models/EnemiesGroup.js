@@ -21,7 +21,7 @@ export default class EnemiesGroup extends Phaser.Physics.Arcade.Group {
 
       switch(level) {
         case 1:
-          var MatrixLevel = [[1,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
+          var MatrixLevel = [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
                             [0,0,0,0,0,0,0,0],[0,0,0,0,1,0,0,0],[0,0,0,0,1,0,0,0]];
                     
           break;

@@ -16,21 +16,28 @@ export default class playGame extends Phaser.Scene{
     }
 
     currentLevel;
+    livesP1;	
     scoreP1;
+    livesP2;	
     scoreP2;
-    init(props) {
-        const { level = 1 } = props
-        this.currentLevel = level
+    init(props) {	
+        const { level = 1 } = props	   
+        this.currentLevel = level;
         //Player 1
+        const { livesP1 = 3 } = props
+        this.livesP1 = livesP1	
         const { scoreP1 = 0 } = props
-        this.scoreP1 = scoreP1
-        //Player 2
+        this.scoreP1 = scoreP1	       
+        //Player 2	  
+        const { livesP2 = 3 } = props
+        this.livesP2 = livesP2	
         const { scoreP2 = 0 } = props
         this.scoreP2 = scoreP2
-    }
+    }	
+
     
     create(){
-        console.log("Starting game");
+        console.log("Starting game level " +  this.currentLevel);
         
         //Fazer o background sempre em primeiro (Imagens são ordenadas umas frentes a outras)
         const width=this.game.config.width;//Diz local da imagem
@@ -45,29 +52,30 @@ export default class playGame extends Phaser.Scene{
         //criar PLAYER1
         this.player1 = new Player1 (this, 200, height-90);//Posicao da img PLAYER1
         this.anims.create({
-            key:'AnimShip',
+            key:'AnimShip1',
             repeat:-1,
             frameRate:5,
             frames: this.anims.generateFrameNames('playerP1', {
                 start:0, end:4
             })
         });
-        this.player1.play('AnimShip');
+        this.player1.play('AnimShip1');
         this.player1.setScale(0.6);
         //this.player1.livesP1 = this.vidasP1;
+        this.player1.setValues(this.scoreP1, this.livesP1);
 
 
         //criar PLAYER2
         this.player2 = new Player2 (this, width - 50, height-90);//Posicao da img PLAYER2
         this.anims.create({
-            key:'AnimShip',
+            key:'AnimShip2',
             repeat:-1,
             frameRate:5,
             frames: this.anims.generateFrameNames('playerP2', {
                 start:0, end:4
             })
         });
-        this.player2.play('AnimShip');
+        this.player2.play('AnimShip2');
         this.player2.setScale(0.6);
 
         //Animacao Bala
@@ -79,6 +87,7 @@ export default class playGame extends Phaser.Scene{
                 start:0, end:3
             })
         });
+        this.player2.setValues(this.scoreP2, this.livesP2);
         
 
         /** TEXT PLAYER 1 */
@@ -86,7 +95,7 @@ export default class playGame extends Phaser.Scene{
             font: "20px magv5",
             fill: "#ffffff"
         });
-        this.labelPointsP1 = this.add.text(50, 50, this.scoreP1, {
+        this.labelPointsP1 = this.add.text(50, 50, this.player1.scoreP1, {
             font: "20px magv5",
             fill: "#FF0000"
         });
@@ -102,7 +111,7 @@ export default class playGame extends Phaser.Scene{
             font: "20px magv5",
             fill: "#ffffff"
         });
-        this.labelPointsP2 = this.add.text(width-100, 50, this.scoreP2, {
+        this.labelPointsP2 = this.add.text(width-100, 50, this.player2.scoreP2, {
             font: "20px magv5",
             fill: "#FF0000"
         });
@@ -173,13 +182,8 @@ export default class playGame extends Phaser.Scene{
             fill: "#ffffff"
         });
 
-        /**
-         * deal with overlap/collision of player1 bullets and enemies
-         */
+        /** BALA PLAYER 1 bate no EMIMIGO */
         this.physics.add.overlap(this.player1.bulletss, this.enemies, (bullet, enemy) => {
-            //bullet.destroy(); //destroy method removes object from the memory
-            //enemy.destroy();
-            
             this.enemies.killAndHide(enemy);
             this.player1.bulletss.killAndHide(bullet);
 
@@ -189,12 +193,12 @@ export default class playGame extends Phaser.Scene{
             //remove enemy from screen and stop it
             enemy.removeFromScreen();
 
-            this.scoreP1 += this.currentLevel * this.player1.livesP1 * 2;//Nivel atual * Vidas atual * 2
+            this.player1.scoreP1 += this.currentLevel * this.player1.livesP1 * 2;//Nivel atual * Vidas atual * 2
             nrTotalEnemys -= 1;//desconta 1 enimigo
             
 
             //update the score text
-            this.labelPointsP1.setText(this.scoreP1);
+            this.labelPointsP1.setText(this.player1.scoreP1);
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
 
             this.validarNumEnemies();
@@ -202,11 +206,7 @@ export default class playGame extends Phaser.Scene{
         });     
 
 
-        
-
-        /**
-         * deal with overlap/collision of player1 bullets and enemies
-         */
+        /** BALA PLAYER 2 bate no EMIMIGO */
         this.physics.add.overlap(this.player2.bulletss, this.enemies, (bullet, enemy) => {
             //bullet.destroy(); //destroy method removes object from the memory
             //enemy.destroy();
@@ -220,12 +220,12 @@ export default class playGame extends Phaser.Scene{
             //remove enemy from screen and stop it
             enemy.removeFromScreen();
 
-            this.scoreP2 += this.currentLevel * this.player2.livesP2 * 2;//Nivel atual * Vidas atual * 2
+            this.player2.scoreP2 += this.currentLevel * this.player2.livesP2 * 2;//Nivel atual * Vidas atual * 2
             nrTotalEnemys -= 1;//desconta 1 enimigo
             
 
             //update the score text
-            this.labelPointsP2.setText(this.scoreP2);
+            this.labelPointsP2.setText(this.player2.scoreP2);
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
 
             this.validarNumEnemies();
@@ -294,41 +294,50 @@ export default class playGame extends Phaser.Scene{
         //Reset quando é outro nivel
         if(nrTotalEnemys==0){
             this.currentLevel+=1;
-            this.scoreP1+=50;
-            this.scoreP2+=50;
+            this.player1.scoreP1+=50;
+            this.player2.scoreP2+=50;
 
             //this.enemies = new EnemiesGroup(this.physics.world, this, this.level);//1 == nivel do jogo
             nrTotalEnemys = this.currentLevel * this.currentLevel;
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
             
             
-            /*
+            
             this.scene.restart({
-                level: this.currentLevel, 
+                level: this.currentLevel,
+                scoreP1: this.player1.scoreP1,
+                scoreP2: this.player2.scoreP2,
                 livesP1: this.player1.livesP1,
-                scoreP1: this.scoreP1, 
-                livesP2: this.player1.livesP2,
-                scoreP2: this.scoreP2
+                livesP2: this.player2.livesP2
             });
-            */
+            
            
         }
     }
 
 
     update(time, delta){
+        if(nrTotalEnemys>0){
+            var randEnimies = Phaser.Math.Between(0, (nrTotalEnemys-1));
+            var inimigo = this.enemies.getChildren()[randEnimies];
+            inimigo.update(this.cursors,time);
+            //console.log(nrTotalEnemys);
+        }
+
         //Mover o background
         bg.tilePositionY = -Math.fround(iter) * 150;
         bg.tilePositionX = Math.fround(iter) * 40;
         iter += bgSpeed;
 
-        if (this.player1.livesP1 > 0 && this.player2.livesP2 > 0) {
+        if (this.player1.livesP1 > 0 || this.player2.livesP2 > 0) {
             //deal with enemies spawn rate
             //this.spawnNewEnemies();
-
-            this.player1.update(this.cursors, time);
-            this.player2.update(this.keysP2, time);
-
+            if(this.player1.livesP1 > 0){
+                this.player1.update(this.cursors, time);
+            }
+            if(this.player2.livesP2 > 0){
+                this.player2.update(this.keysP2, time);
+            }
             this.enemies.children.iterate(function (enemy) {
                 if (enemy.isOutsideCanvas()) {
                     //bullet.active = false;
