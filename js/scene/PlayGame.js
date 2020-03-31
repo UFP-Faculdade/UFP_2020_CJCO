@@ -78,15 +78,18 @@ export default class playGame extends Phaser.Scene{
         this.player2.play('AnimShip2');
         this.player2.setScale(0.6);
 
-        //Animacao Bala
+
+        //Animacao Bala bullet_to_enemy
         this.anims.create({
-            key:'AnimBullet',
+            key:'AnimBullet_to_enemy',
             repeat:-1,
-            frameRate:20,
-            frames: this.anims.generateFrameNames('bulletE', {
+            frameRate:30,
+            frames: this.anims.generateFrameNames('bullet_to_enemy', {
                 start:0, end:3
             })
         });
+
+        //Passagem de parametros para ficheiro player1, player2
         this.player2.setValues(this.scoreP2, this.livesP2);
         
 
@@ -172,8 +175,6 @@ export default class playGame extends Phaser.Scene{
 
         this.enemies.playAnimation('AnimEnemy'+this.currentLevel);
 
-        //this.enemies.play('bulletEE');
-        
         /**
          * create text for ENEMIES sound background
          */
@@ -234,6 +235,14 @@ export default class playGame extends Phaser.Scene{
         });
         
 
+        
+        /** BALA ENIMIGO bate no PLAYER 1 */
+        /*
+        this.physics.add.overlap(this.enemies.bullet, this.player1, (bullet, player1) => {
+            console.log("Bata embateu no Player 1. Restam " + (player1.livesP1-1) + " vidas.");
+            
+        });
+        */
 
 
         
