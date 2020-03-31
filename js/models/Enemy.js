@@ -1,4 +1,5 @@
-import Bullet from './Bullet.js';
+//import Bullet_to_E from './Bullet_to_enemy.js';
+import Bullet_to_P from './Bullet_to_player.js';
 import Explosion from './Explosion.js';
 
 export default class enemy extends Phaser.Physics.Arcade.Sprite{
@@ -14,12 +15,12 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
         this.timeToShoot=0;//devido à bala do passaro
         this.fireRate = 3000;
         this.bulletsMaxSize=1;
-        this.setScale(0.4);
+        this.setScale(0.35);
 
         //this.bullet=[]; //criar um array
         this.bulletss = this.scene.physics.add.group({
             maxSize: this.bulletsMaxSize,
-            classType:Bullet
+            classType:Bullet_to_P
         });
 
     }
@@ -39,16 +40,19 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
 
     update(cursors, time){
         if(this.timeToShoot < time){
-            let bullet=this.bulletss.getFirstDead(true, this.x, this.y, "bullet");
+            let bullet=this.bulletss.getFirstDead(true, this.x, this.y, "bullet_to_player");
             if(bullet){//Apos disparar 5 vezes bloqueia
                 
+                bullet.fire_to_player();
+                /*
                 var valueRandom = Phaser.Math.Between(1, 2);
                 if(valueRandom==1){
                     bullet.fire_to_player(this.scene.player1);
                 }else{
                     bullet.fire_to_player(this.scene.player2);
                 }
-                bullet.setScale(1.25);
+                */
+                bullet.setScale(1.1);
                 
 
             }

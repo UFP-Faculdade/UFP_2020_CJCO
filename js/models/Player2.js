@@ -1,4 +1,4 @@
-import Bullet from './Bullet.js';
+import Bullet_to_E from './Bullet_to_enemy.js';
 import Explosion from './Explosion.js';
 
 export default class Player2 extends Phaser.Physics.Arcade.Sprite{
@@ -17,7 +17,7 @@ export default class Player2 extends Phaser.Physics.Arcade.Sprite{
         //this.bullet=[]; //criar um array
         this.bulletss = this.scene.physics.add.group({
             maxSize: this.bulletsMaxSize,
-            classType:Bullet
+            classType:Bullet_to_E
         });
 
         //used to create an invencibility time window after a death
@@ -39,7 +39,7 @@ export default class Player2 extends Phaser.Physics.Arcade.Sprite{
         
         if(Keys.x.isDown && this.timeToShoot < time){ //Disparar a bala
 
-            let bullet=this.bulletss.getFirstDead(true, this.x, this.y, "bulletE");
+            let bullet=this.bulletss.getFirstDead(true, this.x, this.y, "bullet_to_player", "bullet_to_enemy");
 
 
 
