@@ -7,7 +7,9 @@ var bg;
 var iter = 0
 var bgSpeed = 0.01
 var nrTotalEnemys=1;//Calcular numero de enimigos para depois avançar de nivel
-
+var InicialEnemys=1;
+var timeshoot=0;
+var nivelNaves=1;
 
 export default class playGame extends Phaser.Scene{
     //extends default class PlayGame
@@ -158,22 +160,39 @@ export default class playGame extends Phaser.Scene{
 
         //criar ENEMY
         //this.enemies = new EnemiesGroup(this.physics.world, this, 10,8);
-        this.enemies = new EnemiesGroup(this.physics.world, this, this.currentLevel);//1 == nivel do jogo
- 
-        nrTotalEnemys = this.enemies.getNrNaves();
-
+        nivelNaves = this.currentLevel;
+        if (nivelNaves > 5) { nivelNaves = this.currentLevel%5}
+        if (nivelNaves == 0) { nivelNaves = 5}
+        console.log("nivel:"+nivelNaves); 
         
+        this.enemies = new EnemiesGroup(this.physics.world, this, nivelNaves,1);//1 == nivel do jogo
+        this.enemies2 = new EnemiesGroup(this.physics.world, this, nivelNaves,2);
+
+        nrTotalEnemys = this.enemies.getNrNaves()+this.enemies2.getNrNaves();
+        InicialEnemys = nrTotalEnemys;
+        timeshoot=0;
+
+      
         this.anims.create({
             key:"AnimEnemy"+this.currentLevel,
             repeat:-1,
             frameRate:6,
-            frames: this.anims.generateFrameNames("enemy"+this.currentLevel, {
+            frames: this.anims.generateFrameNames("enemy"+nivelNaves, {
                 start:0, end:3
             })
         });
-        
-
         this.enemies.playAnimation('AnimEnemy'+this.currentLevel);
+
+        this.anims.create({
+            key:"AnimEnemy2",
+            repeat:-1,
+            frameRate:6,
+            frames: this.anims.generateFrameNames("enemy2", {
+                start:0, end:3
+            })
+        });
+        this.enemies2.playAnimation('AnimEnemy2');
+
 
         /**
          * create text for ENEMIES sound background
@@ -185,6 +204,7 @@ export default class playGame extends Phaser.Scene{
 
         /** BALA PLAYER 1 bate no EMIMIGO */
         this.physics.add.overlap(this.player1.bulletss, this.enemies, (bullet, enemy) => {
+            nrTotalEnemys -= 1;//desconta 1 enimigo
             this.enemies.killAndHide(enemy);
             this.player1.bulletss.killAndHide(bullet);
 
@@ -195,7 +215,7 @@ export default class playGame extends Phaser.Scene{
             enemy.removeFromScreen();
 
             this.player1.scoreP1 += this.currentLevel * this.player1.livesP1 * 2;//Nivel atual * Vidas atual * 2
-            nrTotalEnemys -= 1;//desconta 1 enimigo
+           
             
 
             //update the score text
@@ -205,7 +225,29 @@ export default class playGame extends Phaser.Scene{
             this.validarNumEnemies();
          
         });     
+        /** BALA PLAYER 1 bate no EMIMIGO */
+        this.physics.add.overlap(this.player1.bulletss, this.enemies2, (bullet, enemy) => {
+            nrTotalEnemys -= 1;//desconta 1 enimigo
+            this.enemies2.killAndHide(enemy);
+            this.player1.bulletss.killAndHide(bullet);
 
+            //prevent collision with multiple enemies by removing the bullet from screen and stoping it
+            bullet.removeFromScreen();
+
+            //remove enemy from screen and stop it
+            enemy.removeFromScreen();
+
+            this.player1.scoreP1 += this.currentLevel * this.player1.livesP1 * 2;//Nivel atual * Vidas atual * 2
+           
+            
+
+            //update the score text
+            this.labelPointsP1.setText(this.player1.scoreP1);
+            this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
+
+            this.validarNumEnemies();
+         
+        }); 
 
         /** BALA PLAYER 2 bate no EMIMIGO */
         this.physics.add.overlap(this.player2.bulletss, this.enemies, (bullet, enemy) => {
@@ -311,7 +353,6 @@ export default class playGame extends Phaser.Scene{
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
             
             
-            
             this.scene.restart({
                 level: this.currentLevel,
                 scoreP1: this.player1.scoreP1,
@@ -326,15 +367,29 @@ export default class playGame extends Phaser.Scene{
 
 
     update(time, delta){
-        if(nrTotalEnemys>0){
-            var randEnimies = Phaser.Math.Between(0, (nrTotalEnemys-1));
-            var inimigo = this.enemies.getChildren()[randEnimies];
-            inimigo.update(this.cursors,time);
-            //console.log(nrTotalEnemys);
+        /*
+        if(timeshoot < time)
+        {
+            if(nrTotalEnemys>0){
+                //console.log(nrTotalEnemys);
+                var randEnimies = Phaser.Math.Between(0, InicialEnemys-1);
+                    //console.log(randEnimies);
+                var inimigo = this.enemies.getChildren()[randEnimies];
+                while (inimigo==null)
+                {
+                    randEnimies++;
+                    if (randEnimies>InicialEnemys-1){ randEnimies = 0;}
+                    inimigo = this.enemies.getChildren()[randEnimies];
+                }            
+                inimigo.update(this.cursors,time);
+                //console.log(nrTotalEnemys);
+            }
+            timeshoot= time + 300;
         }
-
+*/
+        this.enemies.update(this.cursors,time,nrTotalEnemys,InicialEnemys);
         //Mover o background
-        bg.tilePositionY = -Math.fround(iter) * 150;
+        bg.tilePositionY = -Math.fround(iter) * 150;    
         bg.tilePositionX = Math.fround(iter) * 40;
         iter += bgSpeed;
 
