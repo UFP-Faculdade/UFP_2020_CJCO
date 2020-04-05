@@ -42,7 +42,7 @@ export default class bootGame extends Phaser.Scene{
             frameWidth:104,
             frameHeight:84
         });
-
+                
         this.load.image("bullet_to_player", "assets/images/bullet_to_player.png");//Imagem da bala amarela
         
         this.load.spritesheet("bullet_to_enemy","assets/images/bullet_to_enemy.png",{
