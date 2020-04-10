@@ -63,6 +63,7 @@ export default class bootGame extends Phaser.Scene{
 
     }
     create(){
-        this.scene.start("PlayGame");
+        //this.scene.start("PlayGame");
+        this.scene.start("Menu");
     }
 }
