@@ -38,8 +38,8 @@ export default class playGame extends Phaser.Scene{
     }	
 
     
-    create(){
-        console.log("Starting game level " +  this.currentLevel);
+    create(nJogadores){
+        console.log("Starting game level " +  this.currentLevel + " Jogadores: " + nJogadores);
         
         //Fazer o background sempre em primeiro (Imagens são ordenadas umas frentes a outras)
         const width=this.game.config.width;//Diz local da imagem
@@ -66,20 +66,23 @@ export default class playGame extends Phaser.Scene{
         //this.player1.livesP1 = this.vidasP1;
         this.player1.setValues(this.scoreP1, this.livesP1);
 
-
-        //criar PLAYER2
-        this.player2 = new Player2 (this, width - 50, height-90);//Posicao da img PLAYER2
-        this.anims.create({
-            key:'AnimShip2',
-            repeat:-1,
-            frameRate:5,
-            frames: this.anims.generateFrameNames('playerP2', {
-                start:0, end:4
-            })
-        });
-        this.player2.play('AnimShip2');
-        this.player2.setScale(0.6);
-
+        if (nJogadores==2)
+        {
+            //criar PLAYER2
+            this.player2 = new Player2 (this, width - 50, height-90);//Posicao da img PLAYER2
+            this.anims.create({
+                key:'AnimShip2',
+                repeat:-1,
+                frameRate:5,
+                frames: this.anims.generateFrameNames('playerP2', {
+                    start:0, end:4
+                })
+            });
+            this.player2.play('AnimShip2');
+            this.player2.setScale(0.6);
+            //Passagem de parametros para ficheiro player1, player2
+            this.player2.setValues(this.scoreP2, this.livesP2);
+        }
 
         //Animacao Bala bullet_to_enemy
         this.anims.create({
@@ -90,10 +93,6 @@ export default class playGame extends Phaser.Scene{
                 start:0, end:3
             })
         });
-
-        //Passagem de parametros para ficheiro player1, player2
-        this.player2.setValues(this.scoreP2, this.livesP2);
-        
 
         /** TEXT PLAYER 1 */
         this.labelNameP1 = this.add.text(20, 20, "PLAYER 1", {
@@ -110,20 +109,22 @@ export default class playGame extends Phaser.Scene{
         });
 
         
-
-        /** TEXT PLAYER 2 */
-        this.labelNameP2 = this.add.text(width-130, 20, "PLAYER 2", {
-            font: "20px magv5",
-            fill: "#ffffff"
-        });
-        this.labelPointsP2 = this.add.text(width-100, 50, this.player2.scoreP2, {
-            font: "20px magv5",
-            fill: "#FF0000"
-        });
-        this.labelLivesP2 = this.add.text(width-130 , 80, "Lives: " + this.player2.livesP2, {
-            font: "20px magv5",
-            fill: "#ffffff"
-        });
+        if (nJogadores==2)
+        {
+            /** TEXT PLAYER 2 */
+            this.labelNameP2 = this.add.text(width-130, 20, "PLAYER 2", {
+                font: "20px magv5",
+                fill: "#ffffff"
+            });
+            this.labelPointsP2 = this.add.text(width-100, 50, this.player2.scoreP2, {
+                font: "20px magv5",
+                fill: "#FF0000"
+            });
+            this.labelLivesP2 = this.add.text(width-130 , 80, "Lives: " + this.player2.livesP2, {
+                font: "20px magv5",
+                fill: "#ffffff"
+            });
+        }
 
 
          /**
@@ -249,32 +250,35 @@ export default class playGame extends Phaser.Scene{
          
         }); 
 
-        /** BALA PLAYER 2 bate no EMIMIGO */
-        this.physics.add.overlap(this.player2.bulletss, this.enemies, (bullet, enemy) => {
-            //bullet.destroy(); //destroy method removes object from the memory
-            //enemy.destroy();
+        if (nJogadores==2)
+        {
+            /** BALA PLAYER 2 bate no EMIMIGO */
+            this.physics.add.overlap(this.player2.bulletss, this.enemies, (bullet, enemy) => {
+                //bullet.destroy(); //destroy method removes object from the memory
+                //enemy.destroy();
+                
+                this.enemies.killAndHide(enemy);
+                this.player2.bulletss.killAndHide(bullet);
+
+                //prevent collision with multiple enemies by removing the bullet from screen and stoping it
+                bullet.removeFromScreen();
+
+                //remove enemy from screen and stop it
+                enemy.removeFromScreen();
+
+                this.player2.scoreP2 += this.currentLevel * this.player2.livesP2 * 2;//Nivel atual * Vidas atual * 2
+                nrTotalEnemys -= 1;//desconta 1 enimigo
+                
+
+                //update the score text
+                this.labelPointsP2.setText(this.player2.scoreP2);
+                this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
+
+                this.validarNumEnemies();
+
             
-            this.enemies.killAndHide(enemy);
-            this.player2.bulletss.killAndHide(bullet);
-
-            //prevent collision with multiple enemies by removing the bullet from screen and stoping it
-            bullet.removeFromScreen();
-
-            //remove enemy from screen and stop it
-            enemy.removeFromScreen();
-
-            this.player2.scoreP2 += this.currentLevel * this.player2.livesP2 * 2;//Nivel atual * Vidas atual * 2
-            nrTotalEnemys -= 1;//desconta 1 enimigo
-            
-
-            //update the score text
-            this.labelPointsP2.setText(this.player2.scoreP2);
-            this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
-
-            this.validarNumEnemies();
-
-         
-        });
+            });
+        }
         
 
         
@@ -304,23 +308,24 @@ export default class playGame extends Phaser.Scene{
             }
         });
 
+        if (nJogadores==2)
+        {
+            /** PLAYER 2 embate no ENIMIGO */
+            this.physics.add.overlap(this.player2, this.enemies, (player2, enemy) => {
+                console.log("Crash Player 2. Restam " + (player2.livesP2-1) + " vidas.");
+                if (player2.canBeKilled) {
 
-        /** PLAYER 2 embate no ENIMIGO */
-        this.physics.add.overlap(this.player2, this.enemies, (player2, enemy) => {
-            console.log("Crash Player 2. Restam " + (player2.livesP2-1) + " vidas.");
-            if (player2.canBeKilled) {
-
-                player2.deadP2();
-                this.labelLivesP2.setText("Lives: " + player2.livesP2);
-                this.time.addEvent({
-                    delay: 1000,
-                    callback: () => {
-                        player2.reviveP2();
-                    }
-                });
-            }
-        });
-
+                    player2.deadP2();
+                    this.labelLivesP2.setText("Lives: " + player2.livesP2);
+                    this.time.addEvent({
+                        delay: 1000,
+                        callback: () => {
+                            player2.reviveP2();
+                        }
+                    });
+                }
+            });
+        }
 
 
 
@@ -333,8 +338,10 @@ export default class playGame extends Phaser.Scene{
         });
 
         this.player1.fireSound = fireSound;
-        this.player2.fireSound = fireSound;
-
+        if (nJogadores==2)
+        {
+            this.player2.fireSound = fireSound;
+        }
         this.game.paused = false;
 
     }
@@ -346,21 +353,35 @@ export default class playGame extends Phaser.Scene{
         if(nrTotalEnemys==0){
             this.currentLevel+=1;
             this.player1.scoreP1+=50;
-            this.player2.scoreP2+=50;
-
+            if (this.nJogadores==2)
+            {
+                this.player2.scoreP2+=50;
+            }
             //this.enemies = new EnemiesGroup(this.physics.world, this, this.level);//1 == nivel do jogo
             nrTotalEnemys = this.currentLevel * this.currentLevel;
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
             
-            
-            this.scene.restart({
-                level: this.currentLevel,
-                scoreP1: this.player1.scoreP1,
-                scoreP2: this.player2.scoreP2,
-                livesP1: this.player1.livesP1,
-                livesP2: this.player2.livesP2
-            });
-            
+            if (this.nJogadores==2)
+            {
+                this.scene.restart({
+                    level: this.currentLevel,
+                    scoreP1: this.player1.scoreP1,
+                    scoreP2: this.player2.scoreP2,
+                    livesP1: this.player1.livesP1,
+                    livesP2: this.player2.livesP2
+                });
+            }
+            else
+            {
+                this.scene.restart({
+                    level: this.currentLevel,
+                    scoreP1: this.player1.scoreP1,
+                    scoreP2: 0,
+                    livesP1: this.player1.livesP1,
+                    livesP2: 3
+                });
+            }
+                
            
         }
     }
@@ -399,8 +420,11 @@ export default class playGame extends Phaser.Scene{
             if(this.player1.livesP1 > 0){
                 this.player1.update(this.cursors, time);
             }
-            if(this.player2.livesP2 > 0){
-                this.player2.update(this.keysP2, time);
+            if (this.nJogadores==2)
+            {
+                if(this.player2.livesP2 > 0){
+                    this.player2.update(this.keysP2, time);
+                }
             }
             this.enemies.children.iterate(function (enemy) {
                 if (enemy.isOutsideCanvas()) {
