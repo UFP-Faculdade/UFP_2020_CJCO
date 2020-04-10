@@ -8,36 +8,36 @@ export default class menu extends Phaser.Scene{
 
         
 
-        const width=this.game.config.width;//Diz local da imagem
-        const height=this.game.config.height;//Diz local da imagem
+        const width=this.game.config.width;
+        const height=this.game.config.height;
 
         this.labelNameKeys = this.add.text(width-400, height-500, "PRESS KEYS:", {
             font: "40px magv5",
             fill: "#ffffff"
         });
 
-        this.labelNameP1 = this.add.text(width-380, height-400, "1 - 1 PLAYER", {
+        this.labelNameP1 = this.add.text(width-380, height-400, "1 - 1 Player", {
             font: "40px magv5",
             fill: "#ffffff"
         });
 
-        this.labelNameP2 = this.add.text(width-380, height-300, "2 - 2 PLAYERS", {
+        this.labelNameP2 = this.add.text(width-380, height-340, "2 - 2 Players", {
             font: "40px magv5",
             fill: "#ffffff"
         });   
 
-        this.input.keyboard.on('keyup_ONE', this.pressOne, this);
-        this.input.keyboard.on('keyup_TWO', this.pressTWO, this);
+        this.labelNameScores = this.add.text(width-380, height-280, "3 - HighScores", {
+            font: "40px magv5",
+            fill: "#ffffff"
+        });  
 
-    }
+        this.labelNameExit = this.add.text(width-380, height-220, "0 - Exit Game", {
+            font: "40px magv5",
+            fill: "#ffffff"
+        });  
 
-    pressOne()
-    {
-        this.scene.start("PlayGame");
-    }
-
-    pressTWO()
-    {
-        this.scene.start("PlayGame");
+        this.input.keyboard.on('keyup_ONE', function () {this.scene.start("PlayGame",1);}, this);
+        this.input.keyboard.on('keyup_TWO', function () {this.scene.start("PlayGame",2);}, this);
+        this.input.keyboard.on('keyup_ZERO', function () {this.game.destroy(true);}, this);
     }
 }
