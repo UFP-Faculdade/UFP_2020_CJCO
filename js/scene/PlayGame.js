@@ -22,6 +22,7 @@ export default class playGame extends Phaser.Scene{
     scoreP1;
     livesP2;	
     scoreP2;
+    nplayer;
     init(props) {	
         const { level = 1 } = props	   
         this.currentLevel = level;
@@ -35,11 +36,14 @@ export default class playGame extends Phaser.Scene{
         this.livesP2 = livesP2	
         const { scoreP2 = 0 } = props
         this.scoreP2 = scoreP2
+        const { jogadores = 1 } = props
+        this.nplayer = jogadores;	 
     }	
+    create(){
+       
+        
+        console.log("Starting game level " +  this.currentLevel + " Jogadores: " + this.nplayer);
 
-    
-    create(nJogadores){
-        console.log("Starting game level " +  this.currentLevel + " Jogadores: " + nJogadores);
         
         //Fazer o background sempre em primeiro (Imagens são ordenadas umas frentes a outras)
         const width=this.game.config.width;//Diz local da imagem
@@ -66,7 +70,7 @@ export default class playGame extends Phaser.Scene{
         //this.player1.livesP1 = this.vidasP1;
         this.player1.setValues(this.scoreP1, this.livesP1);
 
-        if (nJogadores==2)
+        if (this.nplayer==2)
         {
             //criar PLAYER2
             this.player2 = new Player2 (this, width - 50, height-90);//Posicao da img PLAYER2
@@ -109,7 +113,7 @@ export default class playGame extends Phaser.Scene{
         });
 
         
-        if (nJogadores==2)
+        if (this.nplayer==2)
         {
             /** TEXT PLAYER 2 */
             this.labelNameP2 = this.add.text(width-130, 20, "PLAYER 2", {
@@ -247,7 +251,7 @@ export default class playGame extends Phaser.Scene{
          
         }); 
 
-        if (nJogadores==2)
+        if (this.nplayer==2)
         {
             /** BALA PLAYER 2 bate no EMIMIGO */
             this.physics.add.overlap(this.player2.bulletss, this.enemies, (bullet, enemy) => {
@@ -305,7 +309,7 @@ export default class playGame extends Phaser.Scene{
             }
         });
 
-        if (nJogadores==2)
+        if (this.nplayer==2)
         {
             /** PLAYER 2 embate no ENIMIGO */
             this.physics.add.overlap(this.player2, this.enemies, (player2, enemy) => {
@@ -335,7 +339,7 @@ export default class playGame extends Phaser.Scene{
         });
 
         this.player1.fireSound = fireSound;
-        if (nJogadores==2)
+        if (this.nplayer==2)
         {
             this.player2.fireSound = fireSound;
         }
@@ -363,7 +367,7 @@ export default class playGame extends Phaser.Scene{
         if(nrTotalEnemys==0){
             this.currentLevel+=1;
             this.player1.scoreP1+=50;
-            if (this.nJogadores==2)
+            if (this.nplayer==2)
             {
                 this.player2.scoreP2+=50;
             }
@@ -371,14 +375,15 @@ export default class playGame extends Phaser.Scene{
             nrTotalEnemys = this.currentLevel * this.currentLevel;
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
             
-            if (this.nJogadores==2)
+            if (this.nplayer==2)
             {
                 this.scene.restart({
                     level: this.currentLevel,
                     scoreP1: this.player1.scoreP1,
                     scoreP2: this.player2.scoreP2,
                     livesP1: this.player1.livesP1,
-                    livesP2: this.player2.livesP2
+                    livesP2: this.player2.livesP2,
+                    jogadores: 2
                 });
             }
             else
@@ -388,7 +393,8 @@ export default class playGame extends Phaser.Scene{
                     scoreP1: this.player1.scoreP1,
                     scoreP2: 0,
                     livesP1: this.player1.livesP1,
-                    livesP2: 3
+                    livesP2: 3,
+                    jogadores: 1
                 });
             }
                 
@@ -418,6 +424,8 @@ export default class playGame extends Phaser.Scene{
             timeshoot= time + 300;
         }
 */
+        
+        
         this.enemies.update(this.cursors,time,nrTotalEnemys,InicialEnemys);
         //Mover o background
         bg.tilePositionY = -Math.fround(iter) * 150;    
@@ -430,7 +438,7 @@ export default class playGame extends Phaser.Scene{
             if(this.player1.livesP1 > 0){
                 this.player1.update(this.cursors, time);
             }
-            if (this.nJogadores==2)
+            if (this.nplayer==2)
             {
                 if(this.player2.livesP2 > 0){
                     this.player2.update(this.keysP2, time);

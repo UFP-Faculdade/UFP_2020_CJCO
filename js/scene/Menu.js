@@ -34,8 +34,8 @@ export default class menu extends Phaser.Scene{
             fill: "#ffffff"
         });  
 
-        this.input.keyboard.on('keyup_ONE', function () {this.scene.start("PlayGame",1);}, this);
-        this.input.keyboard.on('keyup_TWO', function () {this.scene.start("PlayGame",2);}, this);
+        this.input.keyboard.on('keyup_ONE', function () {this.scene.start("PlayGame",{jogadores: 1});}, this);
+        this.input.keyboard.on('keyup_TWO', function () {this.scene.start("PlayGame",{jogadores: 2});}, this);
         this.input.keyboard.on('keyup_THREE', function () {this.scene.start("Highscores");}, this);
         this.input.keyboard.on('keyup_ZERO', function () {this.game.destroy(true);}, this);
     }
