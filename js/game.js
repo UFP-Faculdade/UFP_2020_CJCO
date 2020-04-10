@@ -1,6 +1,7 @@
 import bootGame from './scene/BootGame.js';
 import playGame from './scene/PlayGame.js';
 import menu from './scene/Menu.js';
+import highscores from './scene/Highscores.js';
 
 
 var game;
@@ -9,7 +10,7 @@ window.onload = function() {
         width: 480,
         height: 640,
         backgroundColor: 0x000000,
-        scene: [bootGame, playGame,menu],//Cria um array com valores predefinidos
+        scene: [bootGame, playGame,menu,highscores],//Cria um array com valores predefinidos
         physics: {//plugins para ter gravidade
             default: "arcade",
             arcade: {
