@@ -155,9 +155,6 @@ export default class playGame extends Phaser.Scene{
         this.cursors = this.input.keyboard.createCursorKeys();
         //this.keysP1 = this.input.keyboard.addKeys('w,s,a,d')
         this.keysP2 = this.input.keyboard.addKeys('w,s,a,d,x');
-        this.q = this.input.keyboard.addKey("q");
-        this.p = this.input.keyboard.addKey("p");
-
 
         //criar ENEMY
         //this.enemies = new EnemiesGroup(this.physics.world, this, 10,8);
@@ -331,7 +328,7 @@ export default class playGame extends Phaser.Scene{
 
         this.themeSound = this.sound.add("theme", { volume: 0.1 });
         this.themeSound.stop();//STOPPPPPPPPPPP
-        this.music = true;
+        this.music = false;
         
         let fireSound = this.sound.add("fire", {
             volume: 0.1
@@ -342,8 +339,21 @@ export default class playGame extends Phaser.Scene{
         {
             this.player2.fireSound = fireSound;
         }
-        this.game.paused = false;
 
+        this.input.keyboard.on('keyup-Q', function () {
+            if (!this.music){console.log("carregou q"); this.themeSound.play();}
+            else{console.log("CARREGOU Q");this.themeSound.pause();}
+            this.music=!this.music;
+            }, this);  
+
+        this.game.paused = false;
+ /*       
+        this.input.keyboard.on('keyup-P', function () {
+            if (this.game.paused){console.log("carregou p"); this.scene.resume("Playgame");}
+            else{console.log("CARREGOU P");this.scene.pause();}
+            this.game.paused=!this.game.paused;
+            }, this);  
+*/
     }
     
     
@@ -433,21 +443,6 @@ export default class playGame extends Phaser.Scene{
                 }
             }, this);
 
-
-        
-
-            if(this.q.on==true )
-            { 
-                if (this.music) { 
-                    this.themeSound.play();
-                }
-                else
-                {
-                    this.themeSound.pause();
-                }
-                this.music=!this.music;
-                console.log("MUSIC: "+this.music);
-            }
             /*
             if(this.p.isDown==true )
             { 
