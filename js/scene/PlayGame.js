@@ -291,21 +291,56 @@ export default class playGame extends Phaser.Scene{
             
             });
         }
-        
-
-        
+               
         /** BALA ENIMIGO bate no PLAYER 1 */
-        /*
-        this.physics.add.overlap(this.enemies.bullet, this.player1, (bullet, player1) => {
-            console.log("Bata embateu no Player 1. Restam " + (player1.livesP1-1) + " vidas.");
-            
-        });
-        */
+        for (let i = 0; i < this.enemies.getNrNaves(); i++) {
+            this.physics.add.overlap(this.enemies.getChildren()[i].bulletss, this.player1, (player1) => {
+                console.log("Bala embateu no Player 1. Restam " + (player1.livesP1-1) + " vidas.");
+                if (player1.canBeKilled) {
+                    player1.deadP1();
+                    this.livesP1=player1.livesP1;
+                    this.labelLivesP1.setText("Lives: " + this.livesP1);
+                    if (player1.livesP1 > 0)
+                    {
+                        this.time.addEvent({
+                            delay: 1000,
+                            callback: () => {
+                                player1.reviveP1();
+                            }
+                        });
+                    }
+                }
+                
+            });
+        }
 
-
+        /** BALA ENIMIGO bate no PLAYER 2 */
+        if (this.nplayer==2)
+        {       
+            for (let i = 0; i < this.enemies.getNrNaves(); i++) {
+                this.physics.add.overlap(this.enemies.getChildren()[i].bulletss, this.player2, (player2) => {
+                    console.log("Bala embateu no Player 2. Restam " + (player2.livesP2-1) + " vidas.");
+                    if (player2.canBeKilled) {
+                        player2.deadP2();
+                        this.livesP2=player2.livesP2;
+                        this.labelLivesP2.setText("Lives: " + this.livesP2);
+                        if (player2.livesP2 > 0)
+                        {
+                            this.time.addEvent({
+                                delay: 1000,
+                                callback: () => {
+                                    player2.reviveP2();
+                                }
+                            });
+                        }
+                    }
+                    
+                });
+            }
+        }
         
         /** PLAYER 1 embate no ENIMIGO */
-        this.physics.add.overlap(this.player1, this.enemies, (player1, enemy) => {
+        this.physics.add.overlap(this.player1, this.enemies, (player1) => {
             console.log("Crash Player 1. Restam " + (player1.livesP1-1) + " vidas.");
             if (player1.canBeKilled) {
 
