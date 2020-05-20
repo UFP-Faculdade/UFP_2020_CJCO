@@ -1,25 +1,24 @@
-export default class Bullet_to_E extends Phaser.Physics.Arcade.Sprite{
-    constructor(scene, x, y){
-        super(scene, x, y, "bullet_to_enemy");
-        //super(scene, x, y, "bullet_to_player");
+
+
+export default class Bonus extends Phaser.Physics.Arcade.Sprite{
+
+    constructor(scene, x, y, bonus){
+        super(scene, x, y, "bonus"+bonus);
         this.scene.add.existing(this);
         this.scene.physics.world.enable(this);
-        this.baseVelocity=350;
+        
+        this.baseVelocity=100;
     }
 
-    fire_to_enemy(){//Dispara em direção ao enimigo
-        this.setVelocityY(-200);
+    dropar(){
+        
+        this.setVelocityY(80);
 
-        this.active = true;  
+        this.active = true;
         this.visible = true;
-        this.play('AnimBullet_to_enemy');
-        
-       // this.setBounce(0.8);
-        //this.setCollideWorldBounds(true);
-        
-        this.setScale(0.6);
-    }
 
+        this.setScale(1.0);
+    }   
 
     removeFromScreen() {
         this.x = -100;
@@ -40,4 +39,10 @@ export default class Bullet_to_E extends Phaser.Physics.Arcade.Sprite{
         return this.x>0 || this.x<width || this.y>0 || this.y<10;
     }
 
-}
+    update(){
+
+        this.dropar();
+    
+    }
+
+}  
