@@ -1,6 +1,8 @@
 import Player1 from "../models/Player1.js";
 import Player2 from "../models/Player2.js";
 import EnemiesGroup from "../models/EnemiesGroup.js";
+import highscores from "./Highscores.js";
+
 //import enemy from "../models/Enemy.js";
 
 var bg;
@@ -11,11 +13,13 @@ var InicialEnemys=1;
 var timeshoot=0;
 var nivelNaves=1;
 
+
 export default class playGame extends Phaser.Scene{
     //extends default class PlayGame
     constructor(){
         super("PlayGame");
     }
+
 
     currentLevel;
     livesP1;	
@@ -23,6 +27,8 @@ export default class playGame extends Phaser.Scene{
     livesP2;	
     scoreP2;
     nplayer;
+    Player1Name;
+    Player2Name;
     init(props) {	
         const { level = 1 } = props	   
         this.currentLevel = level;
@@ -38,22 +44,27 @@ export default class playGame extends Phaser.Scene{
         this.scoreP2 = scoreP2
         const { jogadores = 1 } = props
         this.nplayer = jogadores;	 
+        const { nome1 = "Player1" } = props
+        this.Player1Name = nome1;	 
+        const { nome2 = "Player2" } = props
+        this.Player2Name = nome2;	                 
     }	
     create(){
        
         
-        console.log("Starting game level " +  this.currentLevel + " Jogadores: " + this.nplayer);
+        
 
+        console.log("Starting game level " +  this.currentLevel + " Jogadores: " + this.nplayer);
         
         //Fazer o background sempre em primeiro (Imagens são ordenadas umas frentes a outras)
         const width=this.game.config.width;//Diz local da imagem
         const height=this.game.config.height;//Diz local da imagem
         
+        this.highscores = new highscores();
+
         //Background
         //this.add.image(0, 0, "bg").setDisplayOrigin(0,0).setDisplaySize(width, height);//Criei load no BootGame da imagem
         bg = this.add.tileSprite(0, 0, width*4, height*4, 'bg');
-
-
 
         //criar PLAYER1
         this.player1 = new Player1 (this, 200, height-90);//Posicao da img PLAYER1
@@ -99,7 +110,7 @@ export default class playGame extends Phaser.Scene{
         });
 
         /** TEXT PLAYER 1 */
-        this.labelNameP1 = this.add.text(20, 20, "PLAYER 1", {
+        this.labelNameP1 = this.add.text(20, 20, this.Player1Name, {
             font: "20px magv5",
             fill: "#ffffff"
         });
@@ -116,7 +127,7 @@ export default class playGame extends Phaser.Scene{
         if (this.nplayer==2)
         {
             /** TEXT PLAYER 2 */
-            this.labelNameP2 = this.add.text(width-130, 20, "PLAYER 2", {
+            this.labelNameP2 = this.add.text(width-130, 20, this.Player2Name, {
                 font: "20px magv5",
                 fill: "#ffffff"
             });
@@ -299,13 +310,17 @@ export default class playGame extends Phaser.Scene{
             if (player1.canBeKilled) {
 
                 player1.deadP1();
-                this.labelLivesP1.setText("Lives: " + player1.livesP1);
-                this.time.addEvent({
-                    delay: 1000,
-                    callback: () => {
-                        player1.reviveP1();
-                    }
-                });
+                this.livesP1=player1.livesP1;
+                this.labelLivesP1.setText("Lives: " + this.livesP1);
+                if (player1.livesP1 > 0)
+                {
+                    this.time.addEvent({
+                        delay: 1000,
+                        callback: () => {
+                            player1.reviveP1();
+                        }
+                    });
+                }
             }
         });
 
@@ -317,7 +332,8 @@ export default class playGame extends Phaser.Scene{
                 if (player2.canBeKilled) {
 
                     player2.deadP2();
-                    this.labelLivesP2.setText("Lives: " + player2.livesP2);
+                    this.livesP2=player2.livesP2;
+                    this.labelLivesP2.setText("Lives: " + this.livesP2);
                     this.time.addEvent({
                         delay: 1000,
                         callback: () => {
@@ -381,9 +397,11 @@ export default class playGame extends Phaser.Scene{
                     level: this.currentLevel,
                     scoreP1: this.player1.scoreP1,
                     scoreP2: this.player2.scoreP2,
-                    livesP1: this.player1.livesP1,
-                    livesP2: this.player2.livesP2,
-                    jogadores: 2
+                    livesP1: this.livesP1,
+                    livesP2: this.livesP2,
+                    jogadores: 2,
+                    nome1: this.Player1Name,
+                    nome2: this.Player2Name
                 });
             }
             else
@@ -392,9 +410,11 @@ export default class playGame extends Phaser.Scene{
                     level: this.currentLevel,
                     scoreP1: this.player1.scoreP1,
                     scoreP2: 0,
-                    livesP1: this.player1.livesP1,
-                    livesP2: 3,
-                    jogadores: 1
+                    livesP1: this.livesP1,
+                    livesP2: 0,
+                    jogadores: 1,
+                    nome1: this.Player1Name,
+                    nome2: this.Player2Name
                 });
             }
                 
@@ -432,18 +452,20 @@ export default class playGame extends Phaser.Scene{
         bg.tilePositionX = Math.fround(iter) * 40;
         iter += bgSpeed;
 
-        if (this.player1.livesP1 > 0 || this.player2.livesP2 > 0) {
+        if (this.livesP1 > 0 || this.livesP2 > 0) {
             //deal with enemies spawn rate
             //this.spawnNewEnemies();
             if(this.player1.livesP1 > 0){
                 this.player1.update(this.cursors, time);
             }
+
             if (this.nplayer==2)
             {
-                if(this.player2.livesP2 > 0){
+                if(this.livesP2 > 0){
                     this.player2.update(this.keysP2, time);
                 }
             }
+
             this.enemies.children.iterate(function (enemy) {
                 if (enemy.isOutsideCanvas()) {
                     //bullet.active = false;
@@ -465,6 +487,24 @@ export default class playGame extends Phaser.Scene{
                 console.log("Pausa")
             } 
             */
+        }
+        else
+        {
+            alert("GAME OVER!");
+            var pos1 = this.highscores.verifyScore(this.player1.scoreP1);
+            if (pos1 > 0) 
+            {
+                this.highscores.setHighscore(pos1,this.Player1Name,this.player1.scoreP1);
+            }
+            if (this.nplayer==2)
+            {
+                var pos2 = this.highscores.verifyScore(this.player2.scoreP2);
+                if (pos2 > 0) 
+                {
+                    this.highscores.setHighscore(pos2,this.Player2Name,this.player2.scoreP2);
+                }
+            } 
+            this.scene.start("Menu");
         }
     }
 }
