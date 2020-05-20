@@ -4,13 +4,12 @@ export default class Bullet_to_P extends Phaser.Physics.Arcade.Sprite{
         super(scene, x, y, "bullet_to_player");
         this.scene.add.existing(this);
         this.scene.physics.world.enable(this);
-        this.baseVelocity=350;
-
+        this.baseVelocity=100;
     }
 
-    fire_to_player(){//Dispara em direção ao PLAYER
+    fire_to_player(velocidade){//Dispara em direção ao PLAYER
         
-        this.setVelocityY(70);
+        this.setVelocityY(velocidade);
 
         /*
         const dx = player1.x - this.x;

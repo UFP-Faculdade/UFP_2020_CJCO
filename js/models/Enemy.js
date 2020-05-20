@@ -25,7 +25,17 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
         });
 
     }
+
+    getX()
+    {
+        return this.x;
+    }
     
+    getY()
+    {
+        return this.y;
+    }
+
     removeFromScreen() {
         new Explosion(this.scene, this.x, this.y);
         this.x = -200;
@@ -44,7 +54,7 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
             let bullet=this.bulletss.getFirstDead(true, this.x, this.y, "bullet_to_player");
             if(bullet){//Apos disparar 5 vezes bloqueia
                 
-                bullet.fire_to_player();
+                bullet.fire_to_player(100);
                 /*
                 var valueRandom = Phaser.Math.Between(1, 2);
                 if(valueRandom==1){

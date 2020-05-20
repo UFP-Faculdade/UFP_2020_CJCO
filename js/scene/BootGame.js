@@ -55,6 +55,13 @@ export default class bootGame extends Phaser.Scene{
             frameHeight: 64,
         });
 
+        this.load.image("bonus1","assets/ships/PNG/Power-ups/powerupBlue_shield.png");
+
+        this.load.image("bonus2","assets/ships/PNG/Power-ups/powerupGreen_star.png");
+
+        this.load.image("bonus3","assets/ships/PNG/Power-ups/powerupRed_bolt.png");
+
+
         //this.load.audio("fire", "assets/song/fire-sound.mp3");
         this.load.audio("fire", "assets/sounds/Weapons/Lasers/sfx_wpn_laser5.wav");
         this.load.audio("theme", "assets/song/start_8bit.mp3");
