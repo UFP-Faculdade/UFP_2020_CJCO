@@ -1,20 +1,19 @@
+var MatrixScores = [["Player",0],["Player",0],["Player",0],["Player",0],["Player",0],
+["Player",0],["Player",0],["Player",0],["Player",0],["Player",0]];
+
 export default class highscores extends Phaser.Scene{
     constructor(){
         super("Highscores");
     }
-
 
     create(){
 
         const width=this.game.config.width;
         const height=this.game.config.height;
 
-        var MatrixScores = [["Player",0],["Player",0],["Player",0],["Player",0],["Player",0],
-                        ["Player",0],["Player",0],["Player",0],["Player",0],["Player",0]];
-
         for (let i = 0; i < 10; i++)
         {
-            this.labelName = this.add.text(width-300, height-(500-(i*40)+40), MatrixScores[i][0] + i + " - "+MatrixScores[i][1]+" Pontos", {
+            this.labelName = this.add.text(width-300, height-(500-(i*40)+40), MatrixScores[i][0] + " - "+MatrixScores[i][1]+" Pontos", {
                 font: "20px magv5",
                 fill: "#ffffff"
             });
