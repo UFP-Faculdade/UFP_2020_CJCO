@@ -17,7 +17,7 @@ export default class Bonus extends Phaser.Physics.Arcade.Sprite{
         this.active = true;
         this.visible = true;
 
-        this.setScale(1.0);
+        this.setScale(0.8);
     }   
 
     removeFromScreen() {
@@ -40,9 +40,7 @@ export default class Bonus extends Phaser.Physics.Arcade.Sprite{
     }
 
     update(){
-
         this.dropar();
-    
     }
 
 }  
