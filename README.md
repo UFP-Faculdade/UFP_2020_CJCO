@@ -15,7 +15,7 @@ UFP 2020 Computação Jogos
 
 ### Perda de Vidas
 * ❌ Irá inicialmente perder o escudo caso tenha o Bónus
-* ❌ No momento em que a bala do enimigo embater na nave do Player
+* ✔️ No momento em que a bala do enimigo embater na nave do Player
 * ✔️ Sempre que a nave do Player embater contra um enimigo
 
 ### Subir de nivel
@@ -34,11 +34,11 @@ UFP 2020 Computação Jogos
 * ❌ Ganhar uma vida extra
 
 ### Teclas de Atalho
-* ❌ Tecla "Q" de iniciar/parar a musica de jogo
+* ✔️ Tecla "Q" de iniciar/parar a musica de jogo
 * ❌ Tecla "P" para suspender o jogo
 
 ### Por desenvolver
-* ❌ Disparar random do enimigo
+* ✔️ Disparar random do enimigo
 * ❌ Pause e resume
 * ❌ Criar o boss
 
