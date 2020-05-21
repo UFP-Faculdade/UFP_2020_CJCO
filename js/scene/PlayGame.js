@@ -224,26 +224,27 @@ export default class playGame extends Phaser.Scene{
             //Bonus
             nbonus=Phaser.Math.Between(0, 100);
             //console.log(bonus);
-            if (nbonus > 47 && nbonus < 53)
-            {
-                console.log("Bonus nova vida."); 
-                this.bonus = new Bonus(this, enemy.getX(), enemy.getY(), 2); 
-                this.bonus.update();
+            if(nrTotalEnemys>0){//Não lança bonus no ultimo enimigo morto
+                if (nbonus > 47 && nbonus < 53)
+                {
+                    console.log("Bonus vida."); 
+                    this.bonus = new Bonus(this, enemy.getX(), enemy.getY(), 2); 
+                    this.bonus.update();
 
+                }
+                else if (nbonus > 25 && nbonus < 36)
+                    {
+                        console.log("Bonus escudo.");  
+                        this.bonus = new Bonus(this, enemy.getX(), enemy.getY(), 1); 
+                        this.bonus.update();               
+                    }
+                else if (nbonus > 65 && nbonus < 81)
+                    {
+                        console.log("Bonus Balas.");  
+                        this.bonus = new Bonus(this, enemy.getX(), enemy.getY(), 3); 
+                        this.bonus.update();                 
+                    }
             }
-            else if (nbonus > 25 && nbonus < 36)
-                {
-                    console.log("Bonus escudo.");  
-                    this.bonus = new Bonus(this, enemy.getX(), enemy.getY(), 1); 
-                    this.bonus.update();               
-                }
-            else if (nbonus > 65 && nbonus < 81)
-                {
-                    console.log("Bonus Balas.");  
-                    this.bonus = new Bonus(this, enemy.getX(), enemy.getY(), 3); 
-                    this.bonus.update();                 
-                }
-
             this.enemies.killAndHide(enemy);
             this.player1.bulletss.killAndHide(bullet);
 
@@ -267,6 +268,13 @@ export default class playGame extends Phaser.Scene{
          
         });     
 
+        /////////////// BONUS ///
+        /** PLAYER 1 embate no BONUS */
+        this.physics.add.overlap(this.player1, this.bonus, (player1, bonus) => {
+            console.log("Player 1 apanhou um bonus qualquer.");
+        });
+
+
         /** BALA PLAYER 1 bate no EMIMIGO */
         this.physics.add.overlap(this.player1.bulletss, this.enemies2, (bullet, enemy) => {
             nrTotalEnemys -= 1;//desconta 1 enimigo
@@ -282,7 +290,7 @@ export default class playGame extends Phaser.Scene{
             console.log(nbonus);
             if (nbonus > 47 && nbonus < 53)
             {
-                console.log("Bonus nova vida.");                
+                console.log("Bonus vida.");                
             }
             else if (nbonus > 25 && nbonus < 36)
                 {
@@ -300,8 +308,7 @@ export default class playGame extends Phaser.Scene{
             this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
 
             this.validarNumEnemies();
-         
-        }); 
+        });
 
         if (this.nplayer==2)
         {
@@ -422,6 +429,8 @@ export default class playGame extends Phaser.Scene{
                 }
             });
         }
+
+
 
         this.themeSound = this.sound.add("theme", { volume: 0.1 });
         this.themeSound.stop();//STOPPPPPPPPPPP
