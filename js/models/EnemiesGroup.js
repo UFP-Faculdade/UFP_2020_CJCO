@@ -88,7 +88,7 @@ export default class EnemiesGroup extends Phaser.Physics.Arcade.Group {
       if(this.timeToShoot < time)
       {
         this.timeToShoot = time + this.FireRate;
-        console.log("Entrou");
+        //console.log("Entrou");
         /*
         let bullet=this.bulletss.getFirstDead(true, this.x, this.y, "bullet");
         if(bullet){//Apos disparar 5 vezes bloqueia
