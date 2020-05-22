@@ -56,7 +56,7 @@ export default class playGame extends Phaser.Scene{
         
         
 
-        console.log("Starting game level " +  this.currentLevel + " Jogadores: " + this.nplayer);
+        console.log("Starting Level " +  this.currentLevel + "\nJogadores: " + this.nplayer);
         
         //Fazer o background sempre em primeiro (Imagens são ordenadas umas frentes a outras)
         const width=this.game.config.width;//Diz local da imagem
@@ -178,8 +178,7 @@ export default class playGame extends Phaser.Scene{
         nivelNaves = this.currentLevel;
         if (nivelNaves > 5) { nivelNaves = this.currentLevel%5}
         if (nivelNaves == 0) { nivelNaves = 5}
-        console.log("nivel:"+nivelNaves); 
-        
+       
         this.enemies = new EnemiesGroup(this.physics.world, this, nivelNaves,1);//1 == nivel do jogo
         this.enemies2 = new EnemiesGroup(this.physics.world, this, nivelNaves,2);
 
@@ -225,25 +224,20 @@ export default class playGame extends Phaser.Scene{
             nbonus=Phaser.Math.Between(0, 100);
             //console.log(bonus);
             if(nrTotalEnemys>0){//Não lança bonus no ultimo enimigo morto
-                if (nbonus > 47 && nbonus < 53)
-                {
-                    console.log("Bonus vida."); 
+                if (nbonus > 47 && nbonus < 53) {
+                    console.log("Bonus vida. ++"); 
                     this.bonus = new Bonus(this, enemy.getX(), enemy.getY(), 2); 
                     this.bonus.update();
 
-                }
-                else if (nbonus > 25 && nbonus < 36)
-                    {
-                        console.log("Bonus escudo.");  
+                } else if (nbonus > 25 && nbonus < 36) {
+                        console.log("Bonus escudo. ++");  
                         this.bonus = new Bonus(this, enemy.getX(), enemy.getY(), 1); 
                         this.bonus.update();               
-                    }
-                else if (nbonus > 65 && nbonus < 81)
-                    {
-                        console.log("Bonus Balas.");  
-                        this.bonus = new Bonus(this, enemy.getX(), enemy.getY(), 3); 
-                        this.bonus.update();                 
-                    }
+                } else if (nbonus > 65 && nbonus < 81) {
+                    console.log("Bonus Balas. ++");  
+                    this.bonus = new Bonus(this, enemy.getX(), enemy.getY(), 3); 
+                    this.bonus.update();                 
+                }
             }
             this.enemies.killAndHide(enemy);
             this.player1.bulletss.killAndHide(bullet);
@@ -285,21 +279,25 @@ export default class playGame extends Phaser.Scene{
             //remove enemy from screen and stop it
             enemy.removeFromScreen();
 
+            /*
             //Bonus
             nbonus=Phaser.Math.Between(0, 100);
             console.log(nbonus);
+            if(nrTotalEnemys>0){//Não lança bonus no ultimo enimigo morto
             if (nbonus > 47 && nbonus < 53)
             {
-                console.log("Bonus vida.");                
+                console.log("Bonus vida. ~~");                
             }
             else if (nbonus > 25 && nbonus < 36)
                 {
-                    console.log("Bonus escudo.");  
+                    console.log("Bonus escudo. ~~");  
                 }
             else if (nbonus > 65 && nbonus < 81)
                 {
-                    console.log("Bonus Balas.");  
+                    console.log("Bonus Balas. ~~");  
                 }
+            }
+            */
 
             this.player1.scoreP1 += this.currentLevel * this.player1.livesP1 * 2;//Nivel atual * Vidas atual * 2
            
@@ -447,19 +445,19 @@ export default class playGame extends Phaser.Scene{
         }
 
         this.input.keyboard.on('keyup-Q', function () {
-            if (!this.music){console.log("carregou q"); this.themeSound.play();}
-            else{console.log("CARREGOU Q");this.themeSound.pause();}
+            if (!this.music){console.log("Audio Ativo"); this.themeSound.play();}
+            else{console.log("Audio Desativo");this.themeSound.pause();}
             this.music=!this.music;
             }, this);  
 
         this.game.paused = false;
        
         this.input.keyboard.on('keyup-P', function () {
-            console.log("Pause");
+            console.log("Game Pause");
             this.game.paused = true;
             alert("GAME PAUSED!");
             this.game.paused = false;
-            console.log("Continue");
+            console.log("Game Continue");
             }, this);  
 
     }

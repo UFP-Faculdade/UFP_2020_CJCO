@@ -56,10 +56,10 @@ export default class bootGame extends Phaser.Scene{
         });
 
         this.load.image("bonus1","assets/ships/PNG/Power-ups/powerupBlue_shield.png");
-
         this.load.image("bonus2","assets/ships/PNG/Power-ups/powerupGreen_star.png");
-
         this.load.image("bonus3","assets/ships/PNG/Power-ups/powerupRed_bolt.png");
+
+        this.load.image("bigboss","assets/images/boss.png");
 
 
         //this.load.audio("fire", "assets/song/fire-sound.mp3");
