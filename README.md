@@ -14,13 +14,13 @@ UFP 2020 Computação Jogos
 * ✔️ Sempre que avançar um nivel ganhará 50 pontos
 
 ### Perda de Vidas
-* ❌ Irá inicialmente perder o escudo caso tenha o Bónus
+* ✔️ Irá inicialmente perder o escudo caso tenha o Bónus
 * ✔️ No momento em que a bala do enimigo embater na nave do Player
 * ✔️ Sempre que a nave do Player embater contra um enimigo
 
 ### Subir de nivel
 * ✔️ Aumenta o numero de naves / Sequencia diferente
-* ❌ Aumentar velocidade disparo bala do Enimigo para o Player
+* ✔️ Aumentar velocidade disparo bala do Enimigo para o Player
 * ❌ Aumentar o numero de balas do Enimigo para o Player
 
 ### Sons do Jogo
@@ -29,18 +29,18 @@ UFP 2020 Computação Jogos
 * ✔️ Disparo da nave do Player 2
 
 ### Bónus
-* ❌ Ganhar um Escudo
+* ✔️ Ganhar um Escudo
+* ✔️ Ganhar uma vida extra
 * ❌ Ganhar 3 tiros
-* ❌ Ganhar uma vida extra
 
 ### Teclas de Atalho
 * ✔️ Tecla "Q" de iniciar/parar a musica de jogo
-* ❌ Tecla "P" para suspender o jogo
+* ✔️ Tecla "P" para suspender o jogo
 
 ### Por desenvolver
 * ✔️ Disparar random do enimigo
-* ❌ Pause e resume
-* ❌ Criar o boss
+* ✔️ Pause e resume
+* ✔️ Criar o boss
 
 
 
