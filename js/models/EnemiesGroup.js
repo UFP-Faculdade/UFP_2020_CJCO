@@ -11,7 +11,7 @@ export default class EnemiesGroup extends Phaser.Physics.Arcade.Group {
     nrnaves;
 
     //constructor(world, scene, linhas, colunas) {
-    constructor(world, scene, level,nave) {
+    constructor(world, scene, level, nave) {
       var nrEnemysColunas;
       var nrEnemysLinhas;
 
@@ -21,33 +21,28 @@ export default class EnemiesGroup extends Phaser.Physics.Arcade.Group {
 
       switch(level) {
         case 1:
-          var MatrixLevel = [[0,0,2,0,0,0,0,0],[0,2,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
-                            [0,0,0,0,2,0,0,0],[0,0,0,0,1,0,0,0],[0,0,0,0,1,0,0,0]];
-                    
+          var MatrixLevel = [[1,1,0,0,0,0,0,0],[0,1,1,0,0,0,0,0],[0,0,1,1,0,0,0,0],
+                            [0,0,0,0,0,0,0,0],[0,0,0,0,1,0,0,0],[0,0,0,0,0,0,0,0]];                  
           break;
         case 2:
-          var MatrixLevel = [[1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
-                            [0,0,0,0,0,0,1,0],[0,0,0,0,0,0,0,0],[0,0,1,0,0,0,0,0]];
+          var MatrixLevel = [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
+                            [0,0,0,0,0,0,1,0],[0,0,0,1,0,0,0,0],[0,0,1,0,0,0,0,0]];
           break;
         case 3:
-          var MatrixLevel = [[0,0,0,0,0,0,0,1],[0,0,0,0,1,0,1,0],[1,0,0,0,0,0,0,0],
+          var MatrixLevel = [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],
                             [0,0,0,0,0,0,0,0],[0,0,0,0,1,0,0,0],[0,0,0,0,0,0,0,0]];
           break;
         case 4:
-          var MatrixLevel = [[1,0,0,0,0,0,1,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
-                            [0,0,0,0,0,0,0,0],[0,0,0,1,0,0,0,0],[0,0,0,0,1,0,0,0]];
+          var MatrixLevel = [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
+                            [0,0,1,0,0,0,0,0],[0,0,0,1,0,0,0,0],[0,0,0,0,0,0,0,0]];
           break;  
         case 5:
-          var MatrixLevel = [[0,0,0,0,0,0,0,1],[0,0,0,0,1,0,0,0],[0,0,0,0,0,0,0,0],
-                            [0,1,0,0,0,0,0,0],[0,0,0,0,1,0,0,0],[0,0,1,0,0,0,0,0]];
-          break; 
-        case 6:
-          var MatrixLevel = [[1,0,0,0,0,1,0,0],[0,1,0,0,0,0,0,0],[0,0,0,0,1,0,0,0],
-                            [0,0,0,1,0,0,0,0],[0,0,0,0,0,0,1,0],[0,0,0,0,1,0,0,0]];
+          var MatrixLevel = [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
+                            [0,1,0,0,0,0,0,0],[0,0,0,0,1,0,0,0],[0,0,0,0,0,0,0,0]];
           break;                       
         default:
-          var MatrixLevel = [[1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1],
-                            [1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1]];
+          var MatrixLevel = [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
+                            [0,0,0,0,2,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]];
       }
 
      
@@ -81,7 +76,7 @@ export default class EnemiesGroup extends Phaser.Physics.Arcade.Group {
       return this.nrnaves;
     }
 
-    update(cursors, time, nrTotalEnemys, InicialEnemys)
+    update(cursors, time, nrTotalEnemys, InicialEnemys, nivel, boss)
     {
       //console.log("Entrou");
       
@@ -99,12 +94,18 @@ export default class EnemiesGroup extends Phaser.Physics.Arcade.Group {
             //bullet.setBounce(0.8);//Quando bater, perde lanço
             //bullet.setCollideWorldBounds(true);
          */   
-            
+            this.fireRate=800;
+            if (boss==1)
+            {
+                this.fireRate=0;
+            }
+            this.timeToShoot= time + this.fireRate;
+
             if(nrTotalEnemys>0)
             {
               //console.log(nrTotalEnemys);
               var randEnimies = Phaser.Math.Between(0, InicialEnemys-1);
-                  //console.log(randEnimies);
+              //console.log(randEnimies);
               var inimigo = this.getChildren()[randEnimies];
               while (inimigo==null)
               {
@@ -112,7 +113,7 @@ export default class EnemiesGroup extends Phaser.Physics.Arcade.Group {
                   if (randEnimies>InicialEnemys-1){ randEnimies = 0;}
                   inimigo = this.getChildren()[randEnimies];
               }            
-              inimigo.update(this.cursors,time);
+              inimigo.update(this.cursors,time, nivel, boss);
               //console.log(nrTotalEnemys);
             }
             
