@@ -14,6 +14,7 @@ var InicialEnemys=1;
 var timeshoot=0;
 var nivelNaves=1;
 var nbonus;
+var multiplicador;
 
 
 export default class playGame extends Phaser.Scene{
@@ -31,6 +32,9 @@ export default class playGame extends Phaser.Scene{
     nplayer;
     Player1Name;
     Player2Name;
+    escudoP1;
+    escudoP2;    
+    
     init(props) {	
         const { level = 1 } = props	   
         this.currentLevel = level;
@@ -49,13 +53,14 @@ export default class playGame extends Phaser.Scene{
         const { nome1 = "Player1" } = props
         this.Player1Name = nome1;	 
         const { nome2 = "Player2" } = props
-        this.Player2Name = nome2;	                 
+        this.Player2Name = nome2;
+        const { escudoP1 = 0 } = props
+        this.escudoP1 = escudoP1;
+        const { escudoP2 = 0 } = props
+        this.escudoP2 = escudoP2;
     }	
     create(){
        
-        
-        
-
         console.log("Starting Level " +  this.currentLevel + "\nJogadores: " + this.nplayer);
         
         //Fazer o background sempre em primeiro (Imagens são ordenadas umas frentes a outras)
@@ -64,26 +69,48 @@ export default class playGame extends Phaser.Scene{
         
         this.highscores = new highscores();
 
+        //this.currentLevel=6;
+
         //Background
         //this.add.image(0, 0, "bg").setDisplayOrigin(0,0).setDisplaySize(width, height);//Criei load no BootGame da imagem
         bg = this.add.tileSprite(0, 0, width*4, height*4, 'bg');
 
         //criar PLAYER1
-        this.player1 = new Player1 (this, 200, height-90);//Posicao da img PLAYER1
-        this.anims.create({
-            key:'AnimShip1',
-            repeat:-1,
-            frameRate:5,
-            frames: this.anims.generateFrameNames('playerP1', {
-                start:0, end:4
-            })
-        });
-        this.player1.play('AnimShip1');
-        this.player1.setScale(0.6);
-        //this.player1.livesP1 = this.vidasP1;
-        this.player1.setValues(this.scoreP1, this.livesP1);
+        if (this.livesP1 > 0) 
+        {       
+            this.player1 = new Player1 (this, 200, height-90);//Posicao da img PLAYER1
+            this.anims.create({
+                key:'AnimShip1',
+                repeat:-1,
+                frameRate:5,
+                frames: this.anims.generateFrameNames('playerP1', {
+                    start:0, end:4
+                })
+            });
 
-        if (this.nplayer==2)
+            this.anims.create({
+                key:'AnimShip1E',
+                repeat:-1,
+                frameRate:5,
+                frames: this.anims.generateFrameNames('playerP1E', {
+                    start:0, end:4
+                })
+            });
+
+            if(this.escudoP1==0)
+            {
+                this.player1.play('AnimShip1');
+            }
+            else
+            {
+                this.player1.play('AnimShip1E'); 
+            }
+            this.player1.setScale(0.6);
+            //this.player1.livesP1 = this.vidasP1;
+            this.player1.setValues(this.scoreP1, this.livesP1);
+        }
+
+        if (this.nplayer==2 && this.livesP2 > 0)
         {
             //criar PLAYER2
             this.player2 = new Player2 (this, width - 50, height-90);//Posicao da img PLAYER2
@@ -95,7 +122,24 @@ export default class playGame extends Phaser.Scene{
                     start:0, end:4
                 })
             });
-            this.player2.play('AnimShip2');
+
+            this.anims.create({
+                key:'AnimShip2E',
+                repeat:-1,
+                frameRate:5,
+                frames: this.anims.generateFrameNames('playerP2E', {
+                    start:0, end:4
+                })
+            });
+
+            if(this.escudoP2==0)
+            {
+                this.player2.play('AnimShip2');
+            }
+            else
+            {
+                this.player2.play('AnimShip2E'); 
+            }
             this.player2.setScale(0.6);
             //Passagem de parametros para ficheiro player1, player2
             this.player2.setValues(this.scoreP2, this.livesP2);
@@ -175,37 +219,51 @@ export default class playGame extends Phaser.Scene{
 
         //criar ENEMY
         //this.enemies = new EnemiesGroup(this.physics.world, this, 10,8);
-        nivelNaves = this.currentLevel;
-        if (nivelNaves > 5) { nivelNaves = this.currentLevel%5}
-        if (nivelNaves == 0) { nivelNaves = 5}
-       
-        this.enemies = new EnemiesGroup(this.physics.world, this, nivelNaves,1);//1 == nivel do jogo
-        this.enemies2 = new EnemiesGroup(this.physics.world, this, nivelNaves,2);
+        //nivelNaves = this.currentLevel;
+        //nivelBoss = 1;
+        
+        this.labelBoss = this.add.text(width/2-100, 100, "", {
+            font: "40px magv5",
+            fill: "#00cc00"
+        });
 
-        nrTotalEnemys = this.enemies.getNrNaves()+this.enemies2.getNrNaves();
+        
+        multiplicador = Phaser.Math.FloorTo(this.currentLevel/6);
+        nivelNaves = this.currentLevel%6;
+        if (nivelNaves == 0)
+        { 
+            this.enemies = new EnemiesGroup(this.physics.world, this, nivelNaves,2);
+            this.boss=1;
+            this.vidaBOSS=10*(multiplicador);
+            this.vidaBossIni = this.vidaBOSS;
+            this.labelBoss.setText("Poder: "+this.vidaBOSS);
+        }
+        else
+        {
+            this.enemies = new EnemiesGroup(this.physics.world, this, nivelNaves,1);//1 == nivel do jogo
+            this.boss=0;
+            this.vidaBOSS=0;
+            this.vidaBossIni = this.vidaBOSS;
+            this.labelBoss.setText("");
+        }
+        //this.enemies2 = new EnemiesGroup(this.physics.world, this, nivelNaves,2);
+
+        nrTotalEnemys = this.enemies.getNrNaves();//+this.enemies2.getNrNaves();
         InicialEnemys = nrTotalEnemys;
         timeshoot=0;
 
-      
-        this.anims.create({
-            key:"AnimEnemy"+this.currentLevel,
-            repeat:-1,
-            frameRate:6,
-            frames: this.anims.generateFrameNames("enemy"+nivelNaves, {
-                start:0, end:3
-            })
-        });
-        this.enemies.playAnimation('AnimEnemy'+this.currentLevel);
-
-        this.anims.create({
-            key:"AnimEnemy2",
-            repeat:-1,
-            frameRate:6,
-            frames: this.anims.generateFrameNames("enemy2", {
-                start:0, end:3
-            })
-        });
-        this.enemies2.playAnimation('AnimEnemy2');
+        if (this.boss==0)
+        {      
+            this.anims.create({
+                key:"AnimEnemy"+this.currentLevel,
+                repeat:-1,
+                frameRate:6,
+                frames: this.anims.generateFrameNames("enemy"+nivelNaves, {
+                    start:0, end:3
+                })
+            });
+            this.enemies.playAnimation('AnimEnemy'+this.currentLevel);
+        }
 
 
         /**
@@ -216,162 +274,351 @@ export default class playGame extends Phaser.Scene{
             fill: "#ffffff"
         });
 
+
+        this.bonus11 = new Bonus(this, -500, -500, 1); 
+        this.bonus21 = new Bonus(this, -500, -500, 2); 
+        this.bonus12 = new Bonus(this, -500, -500, 1); 
+        this.bonus22 = new Bonus(this, -500, -500, 2);       
+
         /** BALA PLAYER 1 bate no EMIMIGO */
-        this.physics.add.overlap(this.player1.bulletss, this.enemies, (bullet, enemy) => {
-            nrTotalEnemys -= 1;//desconta 1 enimigo
+        if (this.livesP1 > 0)
+        {
+            this.physics.add.overlap(this.player1.bulletss, this.enemies, (bullet, enemy) => {
+                if (this.boss==1)
+                {
+                    this.player1.bulletss.killAndHide(bullet);
+                    bullet.removeFromScreen();
+                    this.vidaBOSS-=1;
+                    if (this.vidaBOSS <= (this.vidaBossIni/10)*2){this.labelBoss.setColor("#ff0000");}
+                    else if (this.vidaBOSS <= (this.vidaBossIni/10)*6){this.labelBoss.setColor("#ffff00");}
+                    
+                    this.labelBoss.setText("Poder: "+this.vidaBOSS);
 
-            //Bonus
-            nbonus=Phaser.Math.Between(0, 100);
-            //console.log(bonus);
-            if(nrTotalEnemys>0){//Não lança bonus no ultimo enimigo morto
-                if (nbonus > 47 && nbonus < 53) {
-                    console.log("Bonus vida. ++"); 
-                    this.bonus = new Bonus(this, enemy.getX(), enemy.getY(), 2); 
-                    this.bonus.update();
-
-                } else if (nbonus > 25 && nbonus < 36) {
-                        console.log("Bonus escudo. ++");  
-                        this.bonus = new Bonus(this, enemy.getX(), enemy.getY(), 1); 
-                        this.bonus.update();               
-                } else if (nbonus > 65 && nbonus < 81) {
-                    console.log("Bonus Balas. ++");  
-                    this.bonus = new Bonus(this, enemy.getX(), enemy.getY(), 3); 
-                    this.bonus.update();                 
                 }
-            }
-            this.enemies.killAndHide(enemy);
-            this.player1.bulletss.killAndHide(bullet);
+                
+                if (this.vidaBOSS==0)
+                {
+                    nrTotalEnemys -= 1;//desconta 1 enimigo
 
-            //prevent collision with multiple enemies by removing the bullet from screen and stoping it
-            bullet.removeFromScreen();
+                    //Bonus
+                    nbonus=Phaser.Math.Between(0, 100);
+                    //console.log(bonus);
+                    if(nrTotalEnemys>0){//Não lança bonus no ultimo enimigo morto
+                        if (nbonus > 10 && nbonus < 30) {
+                            console.log("Bonus vida. ++");     
+                            this.bonus21.x=enemy.x;             
+                            this.bonus21.y=enemy.y;             
+                            this.bonus21.update();
+                        } else if (nbonus > 60 && nbonus < 80) {
+                                console.log("Bonus escudo. ++");  
+                                this.bonus11.x=enemy.x;             
+                                this.bonus11.y=enemy.y;                         
+                                this.bonus11.update();               
+                        } 
+                    }
+                    this.enemies.killAndHide(enemy);
+                    this.player1.bulletss.killAndHide(bullet);
 
-            //remove enemy from screen and stop it
-            enemy.removeFromScreen();
+                    //prevent collision with multiple enemies by removing the bullet from screen and stoping it
+                    bullet.removeFromScreen();
 
+                    //remove enemy from screen and stop it
+                    enemy.removeFromScreen();
 
+                    this.player1.scoreP1 += this.currentLevel * this.player1.livesP1 * 2;//Nivel atual * Vidas atual * 2
+                
+                    //update the score text
+                    this.labelPointsP1.setText(this.player1.scoreP1);
+                    this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
 
-            this.player1.scoreP1 += this.currentLevel * this.player1.livesP1 * 2;//Nivel atual * Vidas atual * 2
-           
-            
-
-            //update the score text
-            this.labelPointsP1.setText(this.player1.scoreP1);
-            this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
-
-            this.validarNumEnemies();
-         
-        });     
-
+                    this.validarNumEnemies();
+                }
+            });     
+        }
         /////////////// BONUS ///
         /** PLAYER 1 embate no BONUS */
-        this.physics.add.overlap(this.player1, this.bonus, (player1, bonus) => {
-            console.log("Player 1 apanhou um bonus qualquer.");
-        });
+        if (this.livesP1 > 0)
+        {
+            this.physics.add.overlap(this.player1, this.bonus11, (player1, bonus) => {
+                console.log("Player 1 apanhou um bonus Escudo.");
+                this.bonus11.x=-500;             
+                this.bonus11.y=-500; 
+                this.escudoP1=1;
+                this.player1.play('AnimShip1E');
+            });
+            this.physics.add.overlap(this.player1, this.bonus21, (player1, bonus) => {
+                console.log("Player 1 apanhou um bonus Vida.");
+                this.bonus21.x=-500;             
+                this.bonus21.y=-500;             
+                player1.livesP1+=1;
+                this.livesP1=player1.livesP1;
+                this.labelLivesP1.setText("Lives: " + this.livesP1);
+            });   
+            this.physics.add.overlap(this.player1, this.bonus12, (player1, bonus) => {
+                console.log("Player 1 apanhou um bonus Escudo.");
+                this.bonus12.x=-500;             
+                this.bonus12.y=-500; 
+                this.escudoP1=1;
+                this.player1.play('AnimShip1E');               
+            });
+            this.physics.add.overlap(this.player1, this.bonus22, (player1, bonus) => {
+                console.log("Player 1 apanhou um bonus Vida.");
+                this.bonus22.x=-500;             
+                this.bonus22.y=-500;             
+                player1.livesP1+=1;
+                this.livesP1=player1.livesP1;
+                this.labelLivesP1.setText("Lives: " + this.livesP1);
+            });                    
+        }
 
-
-        /** BALA PLAYER 1 bate no EMIMIGO */
-        this.physics.add.overlap(this.player1.bulletss, this.enemies2, (bullet, enemy) => {
-            nrTotalEnemys -= 1;//desconta 1 enimigo
-            this.enemies2.killAndHide(enemy);
-            this.player1.bulletss.killAndHide(bullet);
-            //prevent collision with multiple enemies by removing the bullet from screen and stoping it
-            bullet.removeFromScreen();
-            //remove enemy from screen and stop it
-            enemy.removeFromScreen();
-
-            /*
-            //Bonus
-            nbonus=Phaser.Math.Between(0, 100);
-            console.log(nbonus);
-            if(nrTotalEnemys>0){//Não lança bonus no ultimo enimigo morto
-            if (nbonus > 47 && nbonus < 53)
-            {
-                console.log("Bonus vida. ~~");                
-            }
-            else if (nbonus > 25 && nbonus < 36)
-                {
-                    console.log("Bonus escudo. ~~");  
-                }
-            else if (nbonus > 65 && nbonus < 81)
-                {
-                    console.log("Bonus Balas. ~~");  
-                }
-            }
-            */
-
-            this.player1.scoreP1 += this.currentLevel * this.player1.livesP1 * 2;//Nivel atual * Vidas atual * 2
-           
-            //update the score text
-            this.labelPointsP1.setText(this.player1.scoreP1);
-            this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
-
-            this.validarNumEnemies();
-        });
-
-        if (this.nplayer==2)
+        
+        if (this.nplayer==2 && this.livesP2 > 0)
         {
             /** BALA PLAYER 2 bate no EMIMIGO */
             this.physics.add.overlap(this.player2.bulletss, this.enemies, (bullet, enemy) => {
                 //bullet.destroy(); //destroy method removes object from the memory
                 //enemy.destroy();
-                
-                this.enemies.killAndHide(enemy);
-                this.player2.bulletss.killAndHide(bullet);
+                if (this.boss==1)
+                {
+                    this.player2.bulletss.killAndHide(bullet);
+                    bullet.removeFromScreen();
+                    this.vidaBOSS-=1;
+                    if (this.vidaBOSS <= (this.vidaBossIni/10)*2){this.labelBoss.setColor("#ff0000");}
+                    else if (this.vidaBOSS <= (this.vidaBossIni/10)*6){this.labelBoss.setColor("#ffff00");}
+                    
+                    this.labelBoss.setText("Poder: "+this.vidaBOSS);
+                }
 
-                //prevent collision with multiple enemies by removing the bullet from screen and stoping it
-                bullet.removeFromScreen();
+                if (this.vidaBOSS==0)
+                {
+                    nrTotalEnemys -= 1;//desconta 1 enimigo
 
-                //remove enemy from screen and stop it
-                enemy.removeFromScreen();
+                    //Bonus
+                    nbonus=Phaser.Math.Between(0, 100);
+                    //console.log(bonus);
+                    if(nrTotalEnemys>0){//Não lança bonus no ultimo enimigo morto
+                        if (nbonus > 10 && nbonus < 30) {
+                            console.log("Bonus vida. ++");     
+                            this.bonus22.x=enemy.x;             
+                            this.bonus22.y=enemy.y;             
+                            this.bonus22.update();
+                        } else if (nbonus > 60 && nbonus < 80) {
+                                console.log("Bonus escudo. ++");  
+                                this.bonus12.x=enemy.x;             
+                                this.bonus12.y=enemy.y;                         
+                                this.bonus12.update();               
+                        } 
+                    }
+                                    
+                    this.enemies.killAndHide(enemy);
+                    this.player2.bulletss.killAndHide(bullet);
 
-                this.player2.scoreP2 += this.currentLevel * this.player2.livesP2 * 2;//Nivel atual * Vidas atual * 2
-                nrTotalEnemys -= 1;//desconta 1 enimigo
-                
+                    //prevent collision with multiple enemies by removing the bullet from screen and stoping it
+                    bullet.removeFromScreen();
 
-                //update the score text
-                this.labelPointsP2.setText(this.player2.scoreP2);
-                this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
+                    //remove enemy from screen and stop it
+                    enemy.removeFromScreen();
 
-                this.validarNumEnemies();
+                    this.player2.scoreP2 += this.currentLevel * this.player2.livesP2 * 2;//Nivel atual * Vidas atual * 2               
 
+                    //update the score text
+                    this.labelPointsP2.setText(this.player2.scoreP2);
+                    this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
+
+                    this.validarNumEnemies();
+                }
             
             });
         }
-               
-        /** BALA ENIMIGO bate no PLAYER 1 */
-        for (let i = 0; i < this.enemies.getNrNaves(); i++) {
-            this.physics.add.overlap(this.enemies.getChildren()[i].bulletss, this.player1, (player1,bullet) => {
-                console.log("Bala embateu no Player 1. Restam " + (player1.livesP1-1) + " vidas.");
-                if (player1.canBeKilled) {
-                    bullet.removeFromScreen();
-                    player1.deadP1();
-                    this.livesP1=player1.livesP1;
-                    this.labelLivesP1.setText("Lives: " + this.livesP1);
-                    if (player1.livesP1 > 0)
-                    {
-                        this.time.addEvent({
-                            delay: 1000,
-                            callback: () => {
-                                player1.reviveP1();
-                            }
-                        });
-                    }
-                }
-                
+
+         /////////////// BONUS ///
+        /** PLAYER 1 embate no BONUS */
+        if (this.nplayer==2 && this.livesP2 > 0)
+        {
+            this.physics.add.overlap(this.player2, this.bonus11, (player2, bonus) => {
+                console.log("Player 1 apanhou um bonus Escudo.");
+                this.bonus11.x=-500;             
+                this.bonus11.y=-500; 
+                this.escudoP2=1;
+                this.player2.play('AnimShip2E');                
             });
+            this.physics.add.overlap(this.player2, this.bonus21, (player2, bonus) => {
+                console.log("Player 1 apanhou um bonus Vida.");
+                this.bonus21.x=-500;             
+                this.bonus21.y=-500;             
+                player2.livesP2+=1;
+                this.livesP2=player2.livesP2;
+                this.labelLivesP2.setText("Lives: " + this.livesP2);
+            });
+     
+            this.physics.add.overlap(this.player2, this.bonus12, (player2, bonus) => {
+                console.log("Player 1 apanhou um bonus Escudo.");
+                this.bonus12.x=-500;             
+                this.bonus12.y=-500; 
+                this.escudoP2=1;
+                this.player2.play('AnimShip2E');                
+            });
+            this.physics.add.overlap(this.player2, this.bonus22, (player2, bonus) => {
+                console.log("Player 1 apanhou um bonus Vida.");
+                this.bonus22.x=-500;             
+                this.bonus22.y=-500;             
+                player2.livesP2+=1;
+                this.livesP2=player2.livesP2;
+                this.labelLivesP2.setText("Lives: " + this.livesP2);
+            });
+                      
+        }
+
+        /** BALA ENIMIGO bate no PLAYER 1 */
+        if (this.livesP1 > 0)
+        {
+            for (let i = 0; i < this.enemies.getNrNaves(); i++) {
+                this.physics.add.overlap(this.enemies.getChildren()[i].bulletss, this.player1, (player1,bullet) => {
+                    if (this.escudoP1==0)
+                    {
+                        if (player1.canBeKilled) {
+                            console.log("Bala embateu no Player 1. Restam " + (player1.livesP1-1) + " vidas.");
+                            bullet.removeFromScreen();
+                            player1.deadP1();
+                            this.livesP1=player1.livesP1;
+                            this.labelLivesP1.setText("Lives: " + this.livesP1);
+                            if (player1.livesP1 > 0)
+                            {
+                                this.time.addEvent({
+                                    delay: 1000,
+                                    callback: () => {
+                                        player1.reviveP1();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        console.log("Bala embateu no Player 1 que perde Escudo.");
+                        // Desactiva escudo
+                        bullet.removeFromScreen();
+                        this.escudoP1 = 0;
+                        this.player1.play('AnimShip1');
+                    }
+                });
+            }
         }
 
         /** BALA ENIMIGO bate no PLAYER 2 */
-        if (this.nplayer==2)
+        if (this.nplayer==2 && this.livesP2 > 0)
         {       
             for (let i = 0; i < this.enemies.getNrNaves(); i++) {
                 this.physics.add.overlap(this.enemies.getChildren()[i].bulletss, this.player2, (player2,bullet) => {
-                    console.log("Bala embateu no Player 2. Restam " + (player2.livesP2-1) + " vidas.");
-                    if (player2.canBeKilled) {
+                    if (this.escudoP2==0)
+                    {
+
+                        if (player2.canBeKilled) {
+                            console.log("Bala embateu no Player 2. Restam " + (player2.livesP2-1) + " vidas.");
+                            bullet.removeFromScreen();
+                            player2.deadP2();
+                            this.livesP2=player2.livesP2;
+                            this.labelLivesP2.setText("Lives: " + this.livesP2);
+                            if (player2.livesP2 > 0)
+                            {
+                                this.time.addEvent({
+                                    delay: 1000,
+                                    callback: () => {
+                                        player2.reviveP2();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        console.log("Bala embateu no Player 2 que perde Escudo.");
+                        // Desactiva escudo
                         bullet.removeFromScreen();
+                        this.escudoP2 = 0;
+                        this.player2.play('AnimShip2');
+                    }   
+                });
+            }
+        }
+        
+        /** PLAYER 1 embate no ENIMIGO */
+        if(this.livesP1 > 0)
+        {
+            this.physics.add.overlap(this.player1, this.enemies, (player1) => {
+
+                if (this.escudoP1==0)
+                {
+                    console.log("Crash Player 1. Restam " + (player1.livesP1-1) + " vidas.");   
+                    if (player1.canBeKilled) {
+                        player1.deadP1();
+                        this.livesP1=player1.livesP1;
+                        this.labelLivesP1.setText("Lives: " + this.livesP1);
+                        if (player1.livesP1 > 0)
+                        {
+                            this.time.addEvent({
+                                delay: 1000,
+                                callback: () => {
+                                    player1.reviveP1();
+                                }
+                            });
+                        }
+                    }
+                }    
+                else
+                {
+                    console.log("Inimigo embateu no Player 1 que perde Escudo.");
+                    if (player1.canBeKilled) {
+                        //prevents new collision
+                        player1.canBeKilled = false;
+                        player1.x = -100;
+                        player1.y = -100;                        
+                        if (player1.livesP1 > 0)
+                        {
+                            this.time.addEvent({
+                                delay: 1000,
+                                callback: () => {
+                                    player1.reviveP1();
+                                }
+                            });
+                        }
+                    }
+                    this.escudoP1 = 0;
+                    this.player1.play('AnimShip1');
+                }
+            });
+        }
+
+        if (this.nplayer==2 && this.livesP2 > 0)
+        {
+            /** PLAYER 2 embate no ENIMIGO */
+            this.physics.add.overlap(this.player2, this.enemies, (player2) => {
+                if (this.escudoP2==0)
+                {
+                    if (player2.canBeKilled) {
+                        console.log("Crash Player 2. Restam " + (player2.livesP2-1) + " vidas.");
                         player2.deadP2();
                         this.livesP2=player2.livesP2;
                         this.labelLivesP2.setText("Lives: " + this.livesP2);
+                        if (player2.livesP2 > 0)
+                        {                    
+                            this.time.addEvent({
+                                delay: 1000,
+                                callback: () => {
+                                    player2.reviveP2();
+                                }
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    console.log("Inimigo embateu no Player 2 que perde Escudo.");
+                    if (player2.canBeKilled) {
+                        //prevents new collision
+                        player2.canBeKilled = false;
+                        player2.x = -100;
+                        player2.y = -100;                        
                         if (player2.livesP2 > 0)
                         {
                             this.time.addEvent({
@@ -382,48 +629,8 @@ export default class playGame extends Phaser.Scene{
                             });
                         }
                     }
-                    
-                });
-            }
-        }
-        
-        /** PLAYER 1 embate no ENIMIGO */
-        this.physics.add.overlap(this.player1, this.enemies, (player1) => {
-            console.log("Crash Player 1. Restam " + (player1.livesP1-1) + " vidas.");
-            if (player1.canBeKilled) {
-                player1.deadP1();
-                this.livesP1=player1.livesP1;
-                this.labelLivesP1.setText("Lives: " + this.livesP1);
-                if (player1.livesP1 > 0)
-                {
-                    this.time.addEvent({
-                        delay: 1000,
-                        callback: () => {
-                            player1.reviveP1();
-                        }
-                    });
-                }
-            }
-        });
-
-        if (this.nplayer==2)
-        {
-            /** PLAYER 2 embate no ENIMIGO */
-            this.physics.add.overlap(this.player2, this.enemies, (player2) => {
-                console.log("Crash Player 2. Restam " + (player2.livesP2-1) + " vidas.");
-                if (player2.canBeKilled) {
-                    player2.deadP2();
-                    this.livesP2=player2.livesP2;
-                    this.labelLivesP2.setText("Lives: " + this.livesP2);
-                    if (player2.livesP2 > 0)
-                    {                    
-                        this.time.addEvent({
-                            delay: 1000,
-                            callback: () => {
-                                player2.reviveP2();
-                            }
-                        });
-                    }
+                    this.escudoP2 = 0;
+                    this.player2.play('AnimShip2');
                 }
             });
         }
@@ -438,8 +645,12 @@ export default class playGame extends Phaser.Scene{
             volume: 0.1
         });
 
-        this.player1.fireSound = fireSound;
-        if (this.nplayer==2)
+        if(this.livesP1 > 0)
+        {
+            this.player1.fireSound = fireSound;
+        }
+
+        if (this.nplayer==2 && this.livesP2 > 0)
         {
             this.player2.fireSound = fireSound;
         }
@@ -448,6 +659,17 @@ export default class playGame extends Phaser.Scene{
             if (!this.music){console.log("Audio Ativo"); this.themeSound.play();}
             else{console.log("Audio Desativo");this.themeSound.pause();}
             this.music=!this.music;
+            }, this);  
+
+
+        this.input.keyboard.on('keyup-Y', function () {
+            if (this.themeSound.volume<1)
+            {this.themeSound.volume=this.themeSound.volume+0.1;}
+            }, this);  
+
+        this.input.keyboard.on('keyup-U', function () {
+            if (this.themeSound.volume>0)
+            {this.themeSound.volume=this.themeSound.volume-0.1;}
             }, this);  
 
         this.game.paused = false;
@@ -468,8 +690,11 @@ export default class playGame extends Phaser.Scene{
         //Reset quando é outro nivel
         if(nrTotalEnemys==0){
             this.currentLevel+=1;
-            this.player1.scoreP1+=50;
-            if (this.nplayer==2)
+            if (this.player1.livesP1 > 0)
+            {
+                this.player1.scoreP1+=50;
+            }
+            if (this.nplayer==2 && this.player2.livesP2 > 0)
             {
                 this.player2.scoreP2+=50;
             }
@@ -487,7 +712,9 @@ export default class playGame extends Phaser.Scene{
                     livesP2: this.livesP2,
                     jogadores: 2,
                     nome1: this.Player1Name,
-                    nome2: this.Player2Name
+                    nome2: this.Player2Name,
+                    escudoP1: this.escudoP1,
+                    escudoP2: this.escudoP2
                 });
             }
             else
@@ -500,7 +727,9 @@ export default class playGame extends Phaser.Scene{
                     livesP2: 0,
                     jogadores: 1,
                     nome1: this.Player1Name,
-                    nome2: this.Player2Name
+                    nome2: this.Player2Name,
+                    escudoP1: this.escudoP1,
+                    escudoP2: this.escudoP2
                 });
             }
                 
@@ -532,7 +761,7 @@ export default class playGame extends Phaser.Scene{
 */
         
         
-        this.enemies.update(this.cursors,time,nrTotalEnemys,InicialEnemys);
+        this.enemies.update(this.cursors,time,nrTotalEnemys,InicialEnemys,this.currentLevel, this.boss);
         //Mover o background
         bg.tilePositionY = -Math.fround(iter) * 150;    
         bg.tilePositionX = Math.fround(iter) * 40;

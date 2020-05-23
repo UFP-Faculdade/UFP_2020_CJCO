@@ -16,7 +16,9 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
         this.timeToShoot=0;//devido à bala do passaro
         this.fireRate = 3000;
         this.bulletsMaxSize=1;
-        this.setScale(0.35);
+
+        if (level==0){this.setScale(1.00);}
+        else{this.setScale(0.35);}
 
         //this.bullet=[]; //criar um array
         this.bulletss = this.scene.physics.add.group({
@@ -24,16 +26,8 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
             classType:Bullet_to_P
         });
 
-    }
+        this.sentido=0;
 
-    getX()
-    {
-        return this.x;
-    }
-    
-    getY()
-    {
-        return this.y;
     }
 
     removeFromScreen() {
@@ -49,12 +43,15 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
         return this.x > width || this.y > height || this.x < 0 || this.y < 0;
     }
 
-    update(cursors, time){
+    update(cursors, time, nivel, boss){
         if(this.timeToShoot < time){
             let bullet=this.bulletss.getFirstDead(true, this.x, this.y, "bullet_to_player");
             if(bullet){//Apos disparar 5 vezes bloqueia
                 
-                bullet.fire_to_player(100);
+
+                bullet.fire_to_player(100+(nivel*10));//Velocidade bala inimigo por nivel
+             
+
                 /*
                 var valueRandom = Phaser.Math.Between(1, 2);
                 if(valueRandom==1){
@@ -67,11 +64,46 @@ export default class enemy extends Phaser.Physics.Arcade.Sprite{
                 
 
             }
+            this.fireRate=3000;
+            if (boss==1)
+            {
+                this.fireRate=0;
+            }
             this.timeToShoot= time + this.fireRate;
-       }
-        
+        }
 
+        if (boss==1)
+        {
+            if (this.sentido==0)
+            {
+                this.setVelocityX(-20);
+            }
+            else
+            {
+                this.setVelocityX(20);
+            }
+
+            if (this.x<100)
+            {
+                this.sentido=1;
+            }
+            else 
+            if(this.x>this.scene.game.config.width-100){this.sentido=0;} 
+            
+            /*
+            if(this.sentido==0 && this.x>50 && this.x<(this.scene.game.config.width-50)){
+                
+                this.setVelocityX(-100);
+                this.sentido=1;
+            }  else{
+                    this.setVelocityX(100);
+                    this.sentido=0;
+            }
+            */  
+        }
         
+             
+
         this.bulletss.children.iterate(function(bullet){
             
             const width=this.scene.game.config.width;//Diz local da imagem

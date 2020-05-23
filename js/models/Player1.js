@@ -3,7 +3,7 @@ import Explosion from './Explosion.js';
 
 export default class Player1 extends Phaser.Physics.Arcade.Sprite{
     constructor(scene, x, y){
-        super(scene, x, y, "playerP1");
+        super(scene, x, y,"playerP1");
         this.scene.add.existing(this);
         //enable physics wo sprite
         this.scene.physics.world.enable(this);
@@ -27,6 +27,7 @@ export default class Player1 extends Phaser.Physics.Arcade.Sprite{
 
     }
 
+
     setValues(pontos, vidas)
     {
         this.scoreP1 = pontos;
@@ -39,7 +40,7 @@ export default class Player1 extends Phaser.Physics.Arcade.Sprite{
         if(cursors.space.isDown && this.timeToShoot < time){ //Disparar a bala
 
             let bullet=this.bulletss.getFirstDead(true, this.x, this.y, "bullet_to_player", "bullet_to_enemy");
-
+           
 
 
             if(bullet){//Apos disparar 5 vezes bloqueia
@@ -59,10 +60,7 @@ export default class Player1 extends Phaser.Physics.Arcade.Sprite{
             const height=this.scene.game.config.height;//Diz local da imagem
         
             if(bullet.isOutsideCanvas()){ //se bala for maior que tamanho do ecra
-                
                 this.bulletss.killAndHide(bullet);
-                //this.scoreP1 -= 2;
-                //console.log("123abc");
             }
         }, this)//devido ao objeto
         
