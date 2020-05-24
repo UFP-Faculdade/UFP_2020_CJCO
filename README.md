@@ -10,7 +10,6 @@ UFP 2020 Computação Jogos
 
 ### Pontuação
 * ✔️ Ao acertar no enimigo faz o seguinte calculo de pontos: **Nivel Atual * Vidas Restantes * 2**
-* ❌ Por cada bala falhada ao emimigo irá perder 2 pontos
 * ✔️ Sempre que avançar um nivel ganhará 50 pontos
 
 ### Perda de Vidas
@@ -21,7 +20,6 @@ UFP 2020 Computação Jogos
 ### Subir de nivel
 * ✔️ Aumenta o numero de naves / Sequencia diferente
 * ✔️ Aumentar velocidade disparo bala do Enimigo para o Player
-* ❌ Aumentar o numero de balas do Enimigo para o Player
 
 ### Sons do Jogo
 * ✔️ Musica de Jogo / Background
@@ -31,7 +29,6 @@ UFP 2020 Computação Jogos
 ### Bónus
 * ✔️ Ganhar um Escudo
 * ✔️ Ganhar uma vida extra
-* ❌ Ganhar 3 tiros
 
 ### Teclas de Atalho
 * ✔️ Tecla "Q" de iniciar/parar a musica de jogo
@@ -41,7 +38,6 @@ UFP 2020 Computação Jogos
 * ✔️ Disparar random do enimigo
 * ✔️ Pause e resume
 * ✔️ Criar o boss
-
 
 
 
