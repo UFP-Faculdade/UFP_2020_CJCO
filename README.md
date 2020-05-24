@@ -9,8 +9,9 @@ UFP 2020 Computação Jogos
 * ✔️ Nivel do Jogo
 
 ### Pontuação
-* ✔️ Ao acertar no enimigo faz o seguinte calculo de pontos: **Nivel Atual * Vidas Restantes * 2**
-* ✔️ Sempre que avançar um nivel ganhará 50 pontos
+* ✔️ Acertar no enimigo: Nivel * Vidas * 2
+* ✔️ Avançar um nivel: 50 pontos
+* ✔️ Boss: Cada tiro dá os pontos de Poder
 
 ### Perda de Vidas
 * ✔️ Irá inicialmente perder o escudo caso tenha o Bónus
