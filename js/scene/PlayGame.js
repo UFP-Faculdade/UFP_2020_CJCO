@@ -164,7 +164,7 @@ export default class playGame extends Phaser.Scene{
             font: "20px magv5",
             fill: "#FF0000"
         });
-        this.labelLivesP1 = this.add.text(20, 80, "Lives: " + this.player1.livesP1, {
+        this.labelLivesP1 = this.add.text(20, 80, "Vidas: " + this.player1.livesP1, {
             font: "20px magv5",
             fill: "#ffffff"
         });
@@ -181,7 +181,7 @@ export default class playGame extends Phaser.Scene{
                 font: "20px magv5",
                 fill: "#FF0000"
             });
-            this.labelLivesP2 = this.add.text(width-130 , 80, "Lives: " + this.player2.livesP2, {
+            this.labelLivesP2 = this.add.text(width-130 , 80, "Vidas: " + this.player2.livesP2, {
                 font: "20px magv5",
                 fill: "#ffffff"
             });
@@ -199,16 +199,25 @@ export default class playGame extends Phaser.Scene{
         /**
          * create text for SILENC sound background
          */
-        this.labelSound = this.add.text(20, height - 30, "Q (Silence) ", {
-            font: "13px magv5",
-            fill: "#ffffff"
+        this.labelSound = this.add.text(20, height - 30, "Q (Silencio) ", {
+            font: "12px magv5",
+            fill: "#ffffff",
+            stroke: "#ff0000",
+            strokeThickness: 2
+        });
+
+        this.labelSound = this.add.text(width-100, height - 30, "P (Pausa) ", {
+            font: "12px magv5",
+            fill: "#ffffff",
+            stroke: "#ff0000",
+            strokeThickness: 2
         });
 
         /**
          * create text for ENEMIES sound background
          */
         /*
-        this.labelNrTotalEnemys = this.add.text(250, height - 30, nrTotalEnemys + " Enemies", {
+        this.labelNrTotalEnemys = this.add.text(250, height - 30, nrTotalEnemys + " Inimigos", {
             font: "13px magv5",
             fill: "#ffffff"
         });z
@@ -269,7 +278,7 @@ export default class playGame extends Phaser.Scene{
         /**
          * create text for ENEMIES sound background
          */
-        this.labelNrTotalEnemys = this.add.text(width/2-20, height - 30, nrTotalEnemys + " Enemies", {
+        this.labelNrTotalEnemys = this.add.text(width/2-25, 50, nrTotalEnemys + " Inimigos", {
             font: "13px magv5",
             fill: "#ffffff"
         });
@@ -289,11 +298,19 @@ export default class playGame extends Phaser.Scene{
                     this.player1.bulletss.killAndHide(bullet);
                     bullet.removeFromScreen();
                     this.vidaBOSS-=1;
-                    if (this.vidaBOSS <= (this.vidaBossIni/10)*2){this.labelBoss.setColor("#ff0000");}
-                    else if (this.vidaBOSS <= (this.vidaBossIni/10)*6){this.labelBoss.setColor("#ffff00");}
+                    if (this.vidaBOSS <= (this.vidaBossIni/10)*2){
+                        this.labelBoss.setColor("#ff0000");}
+                    else if (this.vidaBOSS <= (this.vidaBossIni/10)*6){
+                        this.labelBoss.setColor("#ffff00");}
                     
                     this.labelBoss.setText("Poder: "+this.vidaBOSS);
 
+                    this.player1.scoreP1 += this.vidaBossIni;
+
+                    //update the score text
+                    this.labelPointsP1.setText(this.player1.scoreP1);
+
+                    
                 }
                 
                 if (this.vidaBOSS==0)
@@ -318,6 +335,7 @@ export default class playGame extends Phaser.Scene{
                     }
                     this.enemies.killAndHide(enemy);
                     this.player1.bulletss.killAndHide(bullet);
+                    this.explosionSound.play();
 
                     //prevent collision with multiple enemies by removing the bullet from screen and stoping it
                     bullet.removeFromScreen();
@@ -329,7 +347,7 @@ export default class playGame extends Phaser.Scene{
                 
                     //update the score text
                     this.labelPointsP1.setText(this.player1.scoreP1);
-                    this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
+                    this.labelNrTotalEnemys.setText(nrTotalEnemys + " Inimigos");
 
                     this.validarNumEnemies();
                 }
@@ -345,6 +363,7 @@ export default class playGame extends Phaser.Scene{
                 this.bonus11.y=-500; 
                 this.escudoP1=1;
                 this.player1.play('AnimShip1E');
+                this.bonusSound.play();
             });
             this.physics.add.overlap(this.player1, this.bonus21, (player1, bonus) => {
                 console.log("Player 1 apanhou um bonus Vida.");
@@ -352,14 +371,16 @@ export default class playGame extends Phaser.Scene{
                 this.bonus21.y=-500;             
                 player1.livesP1+=1;
                 this.livesP1=player1.livesP1;
-                this.labelLivesP1.setText("Lives: " + this.livesP1);
+                this.labelLivesP1.setText("Vidas: " + this.livesP1);
+                this.bonusSound.play();
             });   
             this.physics.add.overlap(this.player1, this.bonus12, (player1, bonus) => {
                 console.log("Player 1 apanhou um bonus Escudo.");
                 this.bonus12.x=-500;             
                 this.bonus12.y=-500; 
                 this.escudoP1=1;
-                this.player1.play('AnimShip1E');               
+                this.player1.play('AnimShip1E');
+                this.bonusSound.play();           
             });
             this.physics.add.overlap(this.player1, this.bonus22, (player1, bonus) => {
                 console.log("Player 1 apanhou um bonus Vida.");
@@ -367,8 +388,9 @@ export default class playGame extends Phaser.Scene{
                 this.bonus22.y=-500;             
                 player1.livesP1+=1;
                 this.livesP1=player1.livesP1;
-                this.labelLivesP1.setText("Lives: " + this.livesP1);
-            });                    
+                this.labelLivesP1.setText("Vidas: " + this.livesP1);
+                this.bonusSound.play();
+            });
         }
 
         
@@ -412,6 +434,7 @@ export default class playGame extends Phaser.Scene{
                                     
                     this.enemies.killAndHide(enemy);
                     this.player2.bulletss.killAndHide(bullet);
+                    this.explosionSound.play();
 
                     //prevent collision with multiple enemies by removing the bullet from screen and stoping it
                     bullet.removeFromScreen();
@@ -423,7 +446,7 @@ export default class playGame extends Phaser.Scene{
 
                     //update the score text
                     this.labelPointsP2.setText(this.player2.scoreP2);
-                    this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
+                    this.labelNrTotalEnemys.setText(nrTotalEnemys + " Inimigos");
 
                     this.validarNumEnemies();
                 }
@@ -432,7 +455,7 @@ export default class playGame extends Phaser.Scene{
         }
 
          /////////////// BONUS ///
-        /** PLAYER 1 embate no BONUS */
+        /** PLAYER 2 embate no BONUS */
         if (this.nplayer==2 && this.livesP2 > 0)
         {
             this.physics.add.overlap(this.player2, this.bonus11, (player2, bonus) => {
@@ -440,7 +463,8 @@ export default class playGame extends Phaser.Scene{
                 this.bonus11.x=-500;             
                 this.bonus11.y=-500; 
                 this.escudoP2=1;
-                this.player2.play('AnimShip2E');                
+                this.player2.play('AnimShip2E');
+                this.bonusSound.play();
             });
             this.physics.add.overlap(this.player2, this.bonus21, (player2, bonus) => {
                 console.log("Player 1 apanhou um bonus Vida.");
@@ -448,7 +472,8 @@ export default class playGame extends Phaser.Scene{
                 this.bonus21.y=-500;             
                 player2.livesP2+=1;
                 this.livesP2=player2.livesP2;
-                this.labelLivesP2.setText("Lives: " + this.livesP2);
+                this.labelLivesP2.setText("Vidas: " + this.livesP2);
+                this.bonusSound.play();
             });
      
             this.physics.add.overlap(this.player2, this.bonus12, (player2, bonus) => {
@@ -456,7 +481,8 @@ export default class playGame extends Phaser.Scene{
                 this.bonus12.x=-500;             
                 this.bonus12.y=-500; 
                 this.escudoP2=1;
-                this.player2.play('AnimShip2E');                
+                this.player2.play('AnimShip2E');
+                this.bonusSound.play();
             });
             this.physics.add.overlap(this.player2, this.bonus22, (player2, bonus) => {
                 console.log("Player 1 apanhou um bonus Vida.");
@@ -464,7 +490,8 @@ export default class playGame extends Phaser.Scene{
                 this.bonus22.y=-500;             
                 player2.livesP2+=1;
                 this.livesP2=player2.livesP2;
-                this.labelLivesP2.setText("Lives: " + this.livesP2);
+                this.labelLivesP2.setText("Vidas: " + this.livesP2);
+                this.bonusSound.play();
             });
                       
         }
@@ -481,7 +508,7 @@ export default class playGame extends Phaser.Scene{
                             bullet.removeFromScreen();
                             player1.deadP1();
                             this.livesP1=player1.livesP1;
-                            this.labelLivesP1.setText("Lives: " + this.livesP1);
+                            this.labelLivesP1.setText("Vidas: " + this.livesP1);
                             if (player1.livesP1 > 0)
                             {
                                 this.time.addEvent({
@@ -491,6 +518,7 @@ export default class playGame extends Phaser.Scene{
                                     }
                                 });
                             }
+                            this.boosSound.play();
                         }
                     }
                     else
@@ -518,7 +546,7 @@ export default class playGame extends Phaser.Scene{
                             bullet.removeFromScreen();
                             player2.deadP2();
                             this.livesP2=player2.livesP2;
-                            this.labelLivesP2.setText("Lives: " + this.livesP2);
+                            this.labelLivesP2.setText("Vidas: " + this.livesP2);
                             if (player2.livesP2 > 0)
                             {
                                 this.time.addEvent({
@@ -528,6 +556,7 @@ export default class playGame extends Phaser.Scene{
                                     }
                                 });
                             }
+                            this.boosSound.play();
                         }
                     }
                     else
@@ -553,7 +582,7 @@ export default class playGame extends Phaser.Scene{
                     if (player1.canBeKilled) {
                         player1.deadP1();
                         this.livesP1=player1.livesP1;
-                        this.labelLivesP1.setText("Lives: " + this.livesP1);
+                        this.labelLivesP1.setText("Vidas: " + this.livesP1);
                         if (player1.livesP1 > 0)
                         {
                             this.time.addEvent({
@@ -563,6 +592,7 @@ export default class playGame extends Phaser.Scene{
                                 }
                             });
                         }
+                        this.boosSound.play();
                     }
                 }    
                 else
@@ -599,7 +629,7 @@ export default class playGame extends Phaser.Scene{
                         console.log("Crash Player 2. Restam " + (player2.livesP2-1) + " vidas.");
                         player2.deadP2();
                         this.livesP2=player2.livesP2;
-                        this.labelLivesP2.setText("Lives: " + this.livesP2);
+                        this.labelLivesP2.setText("Vidas: " + this.livesP2);
                         if (player2.livesP2 > 0)
                         {                    
                             this.time.addEvent({
@@ -609,6 +639,7 @@ export default class playGame extends Phaser.Scene{
                                 }
                             });
                         }
+                        this.boosSound.play();
                     }
                 }
                 else
@@ -636,30 +667,32 @@ export default class playGame extends Phaser.Scene{
         }
 
 
-
+        //Audios
         this.themeSound = this.sound.add("theme", { volume: 0.1 });
-        this.themeSound.stop();//STOPPPPPPPPPPP
+        this.themeSound.play();
+        let fireSound = this.sound.add("fire", { volume: 0.1 });
+        this.explosionSound = this.sound.add("sound_explosion", { volume: 0.4 });
+        this.bonusSound = this.sound.add("sound_bonus", { volume: 0.4 });
+        this.boosSound = this.sound.add("sound_boos", { volume: 0.4 });
         this.music = false;
-        
-        let fireSound = this.sound.add("fire", {
-            volume: 0.1
-        });
 
-        if(this.livesP1 > 0)
-        {
+
+        if(this.livesP1 > 0){
             this.player1.fireSound = fireSound;
         }
 
-        if (this.nplayer==2 && this.livesP2 > 0)
-        {
+        if (this.nplayer==2 && this.livesP2 > 0){
             this.player2.fireSound = fireSound;
         }
 
         this.input.keyboard.on('keyup-Q', function () {
-            if (!this.music){console.log("Audio Ativo"); this.themeSound.play();}
-            else{console.log("Audio Desativo");this.themeSound.pause();}
+            if (!this.music){
+                console.log("Audio Desativo"); this.themeSound.pause();
+            } else{
+                console.log("Audio Ativo");this.themeSound.play();
+            }
             this.music=!this.music;
-            }, this);  
+        }, this);  
 
 
         this.input.keyboard.on('keyup-Y', function () {
@@ -700,7 +733,7 @@ export default class playGame extends Phaser.Scene{
             }
             //this.enemies = new EnemiesGroup(this.physics.world, this, this.level);//1 == nivel do jogo
             nrTotalEnemys = this.currentLevel * this.currentLevel;
-            this.labelNrTotalEnemys.setText(nrTotalEnemys + " Enemies");
+            this.labelNrTotalEnemys.setText(nrTotalEnemys + " Inimigos");
             
             if (this.nplayer==2)
             {
@@ -739,27 +772,6 @@ export default class playGame extends Phaser.Scene{
 
 
     update(time, delta){
-        /*
-        if(timeshoot < time)
-        {
-            if(nrTotalEnemys>0){
-                //console.log(nrTotalEnemys);
-                var randEnimies = Phaser.Math.Between(0, InicialEnemys-1);
-                    //console.log(randEnimies);
-                var inimigo = this.enemies.getChildren()[randEnimies];
-                while (inimigo==null)
-                {
-                    randEnimies++;
-                    if (randEnimies>InicialEnemys-1){ randEnimies = 0;}
-                    inimigo = this.enemies.getChildren()[randEnimies];
-                }            
-                inimigo.update(this.cursors,time);
-                //console.log(nrTotalEnemys);
-            }
-            timeshoot= time + 300;
-        }
-*/
-        
         
         this.enemies.update(this.cursors,time,nrTotalEnemys,InicialEnemys,this.currentLevel, this.boss);
         //Mover o background
@@ -788,20 +800,6 @@ export default class playGame extends Phaser.Scene{
                 }
             }, this);
 
-            /*
-            if(this.p.isDown==true )
-            { 
-                if (this.game.paused) { 
-                    this.game.resume(); 
-                }
-                else
-                {
-                    this.game.pause();
-                }
-                this.game.paused=!this.game.paused;
-                console.log("Pausa")
-            } 
-            */
         }
         else
         {

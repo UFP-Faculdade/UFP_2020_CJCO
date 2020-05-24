@@ -99,6 +99,9 @@ export default class bootGame extends Phaser.Scene{
         this.load.audio("fire", "assets/sounds/Weapons/Lasers/sfx_wpn_laser5.wav");
         this.load.audio("theme", "assets/song/start_8bit.mp3");
         this.load.audio("gameover", "assets/song/gameover.mp3");
+        this.load.audio("sound_explosion", "assets/song/explosion.mp3");
+        this.load.audio("sound_bonus", "assets/song/bonus_umgawa.mp3");
+        this.load.audio("sound_boos", "assets/song/boos1.mp3");
 
 
     }

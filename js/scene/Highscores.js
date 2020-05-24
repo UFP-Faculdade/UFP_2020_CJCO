@@ -1,5 +1,5 @@
-var MatrixScores = [["Player",500],["Player",400],["Player",350],["Player",300],["Player",250],
-["Player",200],["Player",150],["Player",100],["Player",50],["Player",0]];
+var MatrixScores = [["Joca",500],["Tigre",400],["Gonzo",350],["Micas",300],["Nocas",250],
+["Zequinha",200],["Milenii",150],["Fabish",100],["Roqui",50],["Quaqua",0]];
 
 export default class highscores extends Phaser.Scene{
     constructor(){
@@ -13,17 +13,30 @@ export default class highscores extends Phaser.Scene{
 
         this.bg = this.add.tileSprite(0, 0, width*4, height*4, 'bg');
 
+        
+        this.labelName = this.add.text(width-280, 50, "TOP 10", {
+            font: "24px magv5",
+            fill: "#ff0000",
+            stroke: "#000000",
+            strokeThickness: 6
+        });
+        
+
         for (let i = 0; i < 10; i++)
         {
-            this.labelName = this.add.text(width-350, height-(500-(i*40)+40), MatrixScores[i][0] + " - "+MatrixScores[i][1]+" Pontos", {
+            this.labelName = this.add.text(width-380, height-(500-(i*40)+40), MatrixScores[i][0] + " - "+MatrixScores[i][1]+" Pontos", {
                 font: "20px magv5",
-                fill: "#ffffff"
+                fill: "#ffffff",
+                stroke: "#000000",
+                strokeThickness: 6
             });
         }
 
         this.labelName = this.add.text(width-380, height-50, "Press SPACE to continue", {
             font: "20px magv5",
-            fill: "#ff0000"
+            fill: "#ff0000",
+            stroke: "#000000",
+            strokeThickness: 6
         });
         
         this.input.keyboard.on('keyup_SPACE', function () {this.scene.start("Menu");}, this);   
