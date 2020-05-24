@@ -12,33 +12,33 @@ export default class menu extends Phaser.Scene{
         this.bg = this.add.tileSprite(0, 0, width*2, height*4, 'bgMenu');
 
         this.labelNameKeys = this.add.text(width-400, height-520, "PRESS KEYS:", {
-            font: "40px magv5",
-            fill: "#ffffff"
+            font: "35px magv5",
+            fill: "#00cc00"
         });
 
         this.labelNameP1 = this.add.text(width-380, height-420, "1 - 1 Player", {
-            font: "40px magv5",
-            fill: "#ffffff"
+            font: "35px magv5",
+            fill: "#00cc00"
         });
 
         this.labelNameP2 = this.add.text(width-380, height-360, "2 - 2 Players", {
-            font: "40px magv5",
-            fill: "#ffffff"
+            font: "35px magv5",
+            fill: "#00cc00"
         });   
 
         this.labelNameScores = this.add.text(width-380, height-300, "3 - HighScores", {
-            font: "40px magv5",
-            fill: "#ffffff"
+            font: "35px magv5",
+            fill: "#00cc00"
         });  
 
         this.labelNameScores = this.add.text(width-380, height-240, "4 - Instruções", {
-            font: "40px magv5",
-            fill: "#ffffff"
+            font: "35px magv5",
+            fill: "#00cc00"
         });
 
         this.labelNameExit = this.add.text(width-380, height-180, "0 - Exit Game", {
-            font: "40px magv5",
-            fill: "#ffffff"
+            font: "35px magv5",
+            fill: "#00cc00"
         });  
 
         this.input.keyboard.on('keyup_ONE', function () {

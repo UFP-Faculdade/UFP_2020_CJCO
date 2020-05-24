@@ -15,15 +15,15 @@ export default class highscores extends Phaser.Scene{
 
         for (let i = 0; i < 10; i++)
         {
-            this.labelName = this.add.text(width-300, height-(500-(i*40)+40), MatrixScores[i][0] + " - "+MatrixScores[i][1]+" Pontos", {
+            this.labelName = this.add.text(width-350, height-(500-(i*40)+40), MatrixScores[i][0] + " - "+MatrixScores[i][1]+" Pontos", {
                 font: "20px magv5",
                 fill: "#ffffff"
             });
         }
 
-        this.labelName = this.add.text(width-440, height-50, "Press SPACE to continue", {
+        this.labelName = this.add.text(width-380, height-50, "Press SPACE to continue", {
             font: "20px magv5",
-            fill: "#0000ff"
+            fill: "#ff0000"
         });
         
         this.input.keyboard.on('keyup_SPACE', function () {this.scene.start("Menu");}, this);   
